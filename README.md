@@ -51,27 +51,34 @@ Just set what you want. If something is in the way, the integration disables it 
 
 ## Supplement Light vs. Day/Night Mode
 
-This is the most confusing part of Hikvision's system, so read this before automating your lights.
+This is the most confusing part of Hikvision's system, so read this before automating your lights. There are three entities that work together:
 
-The **Supplement Light** setting (white light or IR, depending on model) controls the light's *configuration* — whether it's enabled, its brightness, and its mode. But it does **not** directly turn the light on or off. The light is physically controlled by **Day/Night Mode**:
+1. **Supplement Light** (select) — Enables the light feature: "White Light" (on) or "Off". This does **not** physically turn the light on by itself.
+2. **Day/Night Mode** (select) — Controls *when* the light actually activates.
+3. **Light Brightness Mode** (select) — "Manual" uses your brightness slider value; "Auto" lets the camera decide.
 
-| Day/Night Mode | Supplement Light behavior |
+The light only physically turns on when **both** Supplement Light is set to "White Light" **and** Day/Night Mode allows it:
+
+| Day/Night Mode | Light behavior |
 |---|---|
-| **Day** | Light stays **off** regardless of supplement light settings |
-| **Night** | Light turns **on** (if supplement light is enabled with brightness > 0) |
-| **Auto** | Camera decides based on its internal ambient light sensor |
+| **Day** | Light stays **off** regardless of other settings |
+| **Night** | Light turns **on** (if Supplement Light = White Light and brightness > 0) |
+| **Auto** | Camera uses its ambient light sensor to decide |
+
+**Recommended setup for automations:**
+
+Leave **Supplement Light** set to "White Light" and **Light Brightness Mode** set to "Manual" all the time. Then automate with just two controls:
+
+- **Brightness slider** — set the intensity you want (0–100)
+- **Day/Night Mode** — switch between "Night" and "Auto" (or "Day") to control when the light activates
+
+This is simpler than toggling multiple entities, and it matches how the camera actually works.
 
 **Important caveats:**
 
-- Day/Night Mode also affects image quality beyond just the light — likely the IR cut filter and internal processing. Leaving it on "Night" 24/7 will degrade your daytime image. "Auto" may work for some setups, but the camera's own day/night switching isn't always ideal.
-- On **ColorVu cameras** (no IR), "Day/Night Mode" is misleading — there's no actual IR cut filter or black-and-white mode. It's effectively just the trigger for the white supplement light.
-- **"Smart Supplement Light"** (the switch entity, if present) is an overexposure suppression feature — it auto-dims the supplement light to reduce glare on nearby objects. It does **not** turn the light on or off.
-
-**To reliably control the light from an automation:**
-
-1. Pre-configure: Supplement Light = On, Brightness = your desired level
-2. **Light ON:** Set Day/Night Mode = Night
-3. **Light OFF:** Set Day/Night Mode back to Auto (or Day)
+- **Day/Night Mode affects image quality**, not just the light. On most cameras it controls the IR cut filter and internal image processing. The "Night" setting genuinely looks better at night, so switching between "Night" at sunset and "Auto" at sunrise is a good approach.
+- On **ColorVu cameras** (no IR), "Day/Night Mode" is misleading — there's no actual IR cut filter or black-and-white mode. It primarily controls the white supplement light trigger.
+- **"Smart Supplement Light"** (the switch entity, if present) is an overexposure suppression feature — it auto-dims the light to reduce glare on nearby objects. It does **not** turn the light on or off.
 
 ## Tested Cameras
 
@@ -150,35 +157,63 @@ automation:
           value: 20
 ```
 
-### Frigate Alert → Supplement Light Blast
+### Day/Night Mode Switching
 
-Flash the white light when Frigate detects a person, then return to auto. **Note:** This works by switching Day/Night Mode, which also affects image quality — see [Supplement Light vs. Day/Night Mode](#supplement-light-vs-daynight-mode) above. Pre-configure your Supplement Light entity to On with your desired brightness before using this.
+Switch Day/Night Mode at sunrise/sunset. "Night" mode looks better at night and reliably activates the supplement light; "Auto" lets the camera handle daytime transitions:
+
+```yaml
+automation:
+  - alias: "Camera Sunset Mode"
+    trigger:
+      - platform: numeric_state
+        entity_id: sun.sun
+        attribute: elevation
+        below: -2
+    action:
+      - service: select.select_option
+        target:
+          entity_id: select.ds_2cd2387g2_lu_day_night_mode
+        data:
+          option: "Night"
+
+  - alias: "Camera Sunrise Mode"
+    trigger:
+      - platform: numeric_state
+        entity_id: sun.sun
+        attribute: elevation
+        above: 2
+    action:
+      - service: select.select_option
+        target:
+          entity_id: select.ds_2cd2387g2_lu_day_night_mode
+        data:
+          option: "Auto"
+```
+
+### Motion Alert → Supplement Light Blast
+
+Crank the light to full brightness on a motion or person detection event, then drop it back down. Works with any NVR or motion sensor — Frigate, Scrypted, SecuritySpy, or a simple binary sensor. Assumes Supplement Light is set to "White Light", Brightness Mode is "Manual", and Day/Night Mode is "Night" or "Auto" in dark conditions (see [Supplement Light vs. Day/Night Mode](#supplement-light-vs-daynight-mode)):
 
 ```yaml
 automation:
   - alias: "Blast Light on Person Detection"
     trigger:
-      - platform: mqtt
-        topic: frigate/events
-        value_template: "{{ value_json['after']['label'] }}"
-        payload: "person"
+      # Use whatever trigger your NVR provides — MQTT, binary sensor, etc.
+      - platform: state
+        entity_id: binary_sensor.your_camera_person_detected
+        to: "on"
     action:
       - service: number.set_value
         target:
-          entity_id: number.ds_2cd2187g2_lsu_light_brightness
+          entity_id: number.ds_2cd2387g2_lu_light_brightness
         data:
           value: 100
-      - service: select.select_option
-        target:
-          entity_id: select.ds_2cd2187g2_lsu_day_night_mode
-        data:
-          option: "Night"
       - delay: "00:00:30"
-      - service: select.select_option
+      - service: number.set_value
         target:
-          entity_id: select.ds_2cd2187g2_lsu_day_night_mode
+          entity_id: number.ds_2cd2387g2_lu_light_brightness
         data:
-          option: "Auto"
+          value: 30
 ```
 
 ## Technical Details
