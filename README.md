@@ -89,7 +89,7 @@ This is simpler than toggling multiple entities, and it matches how the camera a
 | Model | Type | Notes |
 |-------|------|-------|
 | DS-2CD2187G2-LSU | ColorVu 4K dome | Fixed iris, white supplement light |
-| DS-2CD2387G2-LU | ColorVu 4K turret | Fixed iris, white supplement light |
+| DS-2CD2387G2-LU and DS-2CD2387G2-LSU/SL | ColorVu 4K turret | Fixed iris, white supplement light |
 | DS-2CD2T87G2P-LSU/SL | Panoramic ColorVu bullet | Wide-angle, lens distortion correction |
 | PCI-D18Z2HS | Motorized zoom dome | IR, P-Iris, focus control |
 
