@@ -10,7 +10,7 @@ Most Hikvision cameras — especially ColorVu models — have no true auto expos
 
 This integration lets you automate exposure profiles, brigthness, contrast, etc. from HA so you can switch settings based on time of day, sun elevation, or the timer on your smart dishwasher-it's Home Assistant, you know the drill.
 
-Heads up that this was almoste entirely vibe-coded by a grumpy truck driver who can barely format a shell command working witha very patient Claude Code, who also wrote most of this README. 
+Heads up that this was almost entirely vibe-coded by a grumpy truck driver who can barely format a shell command working with a very patient Claude Code, who also wrote most of this README. 
 
 ## What It Exposes
 
@@ -124,7 +124,7 @@ Switch shutter speed at sunset/sunrise for cameras without auto exposure: (This 
 
 ```yaml
 alias: HK127 ISAPI
-description: Manage HK .127 lighting based on sun position
+description: Manage HK .127 lighting based on sunrise times
 triggers:
   - event: sunset
     trigger: sun
