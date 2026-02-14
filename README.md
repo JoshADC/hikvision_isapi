@@ -1,14 +1,13 @@
 # Hikvision ISAPI Image Control
 
-A Home Assistant custom integration that exposes **every image and exposure setting** on Hikvision cameras as native HA entities — switches, sliders, and dropdowns you can automate.
+A Home Assistant custom integration that exposes **every image and exposure setting** on Hikvision cameras as native HA entities-switches, sliders, and dropdowns you can automate.
 
-No existing integration touches these settings. The core `hikvision` integration is read-only (streams + binary sensors). `hikvision_next` adds event switches and diagnostics but still no image control. This integration fills that gap.
 
 ***Heads up that this was almost entirely vibe-coded by a grumpy truck driver who can barely format a shell command working with a very patient Claude Code, who also wrote most of this README. ***
 
 ## Why?
 
-Most Hikvision cameras — especially ColorVu models — have no true auto exposure that I can find. Shutter speed and gain are fixed manual values, not adaptive limits. A single shutter speed that works at midnight is blown out and unsable at noon.
+Most Hikvision cameras, or at least the one's I've tried, have no true auto exposure that I can find. Shutter speed and gain are fixed manual values, not adaptive limits. A single shutter speed that works at midnight is blown out and unsable at noon.
 
 This integration lets you automate exposure profiles, brigthness, contrast, etc. from HA so you can switch settings based on time of day, sun elevation, or the timer on your smart dishwasher-it's Home Assistant, you know the drill.
 
