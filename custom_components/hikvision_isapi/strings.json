@@ -1,0 +1,23 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect to Hikvision Camera",
+        "description": "Enter the camera's IP address and admin credentials. Digest authentication will be used.",
+        "data": {
+          "host": "Host",
+          "username": "Username",
+          "password": "Password"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect to camera. Check the IP address and ensure the camera is reachable.",
+      "invalid_auth": "Invalid credentials. Check the username and password.",
+      "unknown": "An unexpected error occurred."
+    },
+    "abort": {
+      "already_configured": "This camera is already configured."
+    }
+  }
+}
