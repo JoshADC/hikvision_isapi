@@ -88,10 +88,10 @@ This is simpler than toggling multiple entities, and it matches how the camera a
 
 | Model | Type | Notes |
 |-------|------|-------|
-| DS-2CD2187G2-LSU | ColorVu 4K turret | Fixed iris, white supplement light |
+| DS-2CD2187G2-LSU | ColorVu 4K dome | Fixed iris, white supplement light |
 | DS-2CD2387G2-LU | ColorVu 4K turret | Fixed iris, white supplement light |
 | DS-2CD2T87G2P-LSU/SL | Panoramic ColorVu bullet | Wide-angle, lens distortion correction |
-| PCI-D18Z2HS | Motorized zoom turret | IR, P-Iris, focus control |
+| PCI-D18Z2HS | Motorized zoom dome | IR, P-Iris, focus control |
 
 Should work with any Hikvision camera that supports the `/ISAPI/Image/channels/1` endpoint (most modern models). If your camera doesn't work, holler at me, I'll see what we can track down.
 
