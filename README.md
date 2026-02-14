@@ -6,9 +6,11 @@ No existing integration touches these settings. The core `hikvision` integration
 
 ## Why?
 
-Most Hikvision cameras — especially ColorVu models — have no true auto exposure. Shutter speed and gain are fixed manual values, not adaptive limits. A single shutter speed that works at noon produces a black image at midnight.
+Most Hikvision cameras — especially ColorVu models — have no true auto exposure that I can find. Shutter speed and gain are fixed manual values, not adaptive limits. A single shutter speed that works at midnight is blown out and unsable at noon.
 
-This integration lets you automate exposure profiles from HA so you can switch settings based on time of day, sun elevation, or any other trigger — something the cameras simply can't do on their own.
+This integration lets you automate exposure profiles, brigthness, contrast, etc. from HA so you can switch settings based on time of day, sun elevation, or the timer on your smart dishwasher-it's Home Assistant, you know the drill.
+
+Heads up that this was almoste entirely vibe-coded by a grumpy truck driver who can barely format a shell command working witha very patient Claude Code, who also wrote most of this README. 
 
 ## What It Exposes
 
@@ -40,14 +42,14 @@ Additional entities appear on specific models: P-Iris controls (motorized zoom c
 
 ## Conflict Resolution
 
-Several camera features are mutually exclusive — the camera will reject changes if a conflicting feature is active. This integration handles it automatically:
+Several camera features are mutually exclusive-the camera will reject changes if a conflicting feature is active. This integration handles it automatically:
 
 - Enabling **WDR** while **HLC** or **BLC** is active → auto-disables the blocker first, then enables WDR
 - Enabling **BLC** while **WDR** is active → auto-disables WDR first
 - Enabling **HLC** while **WDR** is active → auto-disables WDR first
 - **HLC** and **BLC** can coexist — no conflict
 
-Just set what you want. If something is in the way, the integration disables it and retries — no manual juggling required.
+Just set what you want. If something is in the way, the integration disables it and retries-no manual juggling required.
 
 ## Supplement Light vs. Day/Night Mode
 
@@ -65,6 +67,8 @@ The light only physically turns on when **both** Supplement Light is set to "Whi
 | **Night** | Light turns **on** (if Supplement Light = White Light and brightness > 0) |
 | **Auto** | Camera uses its ambient light sensor to decide |
 
+I think this is how they work anyway, it confuses me every time I mess with it. Play with the settings and see what works for you.
+
 **Recommended setup for automations:**
 
 Leave **Supplement Light** set to "White Light" and **Light Brightness Mode** set to "Manual" all the time. Then automate with just two controls:
@@ -76,20 +80,20 @@ This is simpler than toggling multiple entities, and it matches how the camera a
 
 **Important caveats:**
 
-- **Day/Night Mode affects image quality**, not just the light. On most cameras it controls the IR cut filter and internal image processing. The "Night" setting genuinely looks better at night, so switching between "Night" at sunset and "Auto" at sunrise is a good approach.
-- On **ColorVu cameras** (no IR), "Day/Night Mode" is misleading — there's no actual IR cut filter or black-and-white mode. It primarily controls the white supplement light trigger.
-- **"Smart Supplement Light"** (the switch entity, if present) is an overexposure suppression feature — it auto-dims the light to reduce glare on nearby objects. It does **not** turn the light on or off.
+- **Day/Night Mode affects image quality**, not just the light. On most cameras it controls the IR cut filter and internal image processing. The "Night" setting genuinely looks better at night, so switching between "Night" at sunset and "Auto" at sunrise is what's been working for me.
+
+- **"Smart Supplement Light"** (the switch entity, if present) is an overexposure suppression feature — it auto-dims the light to reduce glare on nearby objects. It does **not** turn the light on or off. This frustrated me to no end, there's even a note in the camera UI explaining this, but I missed it for a long time. I have one of these cameras looking straight down a wall, and this setting does seem to keep the image from blowing out when the light first turns on.
 
 ## Tested Cameras
 
 | Model | Type | Notes |
 |-------|------|-------|
 | DS-2CD2187G2-LSU | ColorVu 4K turret | Fixed iris, white supplement light |
-| DS-2CD2387G2-LU | ColorVu 3MP turret | Fixed iris, white supplement light |
+| DS-2CD2387G2-LU | ColorVu 4K turret | Fixed iris, white supplement light |
 | DS-2CD2T87G2P-LSU/SL | Panoramic ColorVu bullet | Wide-angle, lens distortion correction |
 | PCI-D18Z2HS | Motorized zoom turret | IR, P-Iris, focus control |
 
-Should work with any Hikvision camera that supports the `/ISAPI/Image/channels/1` endpoint (most modern models). If your camera works or doesn't, please open an issue.
+Should work with any Hikvision camera that supports the `/ISAPI/Image/channels/1` endpoint (most modern models). If your camera doesn't work, holler at me, I'll see what we can track down.
 
 ## Installation
 
@@ -116,83 +120,57 @@ Copy the `custom_components/hikvision_isapi` folder to your Home Assistant `conf
 
 ### Day/Night Exposure Profiles
 
-Switch shutter speed and gain at sunset/sunrise for cameras without auto exposure:
+Switch shutter speed at sunset/sunrise for cameras without auto exposure: (This is an actual automation I made entirely in the UI)
 
 ```yaml
-automation:
-  - alias: "Camera Night Exposure"
-    trigger:
-      - platform: numeric_state
-        entity_id: sun.sun
-        attribute: elevation
-        below: -2
-    action:
-      - service: select.select_option
-        target:
-          entity_id: select.ds_2cd2187g2_lsu_shutter_speed
-        data:
-          option: "1/30"
-      - service: number.set_value
-        target:
-          entity_id: number.ds_2cd2187g2_lsu_gain
-        data:
-          value: 60
-
-  - alias: "Camera Day Exposure"
-    trigger:
-      - platform: numeric_state
-        entity_id: sun.sun
-        attribute: elevation
-        above: 2
-    action:
-      - service: select.select_option
-        target:
-          entity_id: select.ds_2cd2187g2_lsu_shutter_speed
-        data:
-          option: "1/150"
-      - service: number.set_value
-        target:
-          entity_id: number.ds_2cd2187g2_lsu_gain
-        data:
-          value: 20
-```
-
-### Day/Night Mode Switching
-
-Switch Day/Night Mode at sunrise/sunset. "Night" mode looks better at night and reliably activates the supplement light; "Auto" lets the camera handle daytime transitions:
-
-```yaml
-automation:
-  - alias: "Camera Sunset Mode"
-    trigger:
-      - platform: numeric_state
-        entity_id: sun.sun
-        attribute: elevation
-        below: -2
-    action:
-      - service: select.select_option
-        target:
-          entity_id: select.ds_2cd2387g2_lu_day_night_mode
-        data:
-          option: "Night"
-
-  - alias: "Camera Sunrise Mode"
-    trigger:
-      - platform: numeric_state
-        entity_id: sun.sun
-        attribute: elevation
-        above: 2
-    action:
-      - service: select.select_option
-        target:
-          entity_id: select.ds_2cd2387g2_lu_day_night_mode
-        data:
-          option: "Auto"
+alias: HK127 ISAPI
+description: Manage HK .127 lighting based on sun position
+triggers:
+  - event: sunset
+    trigger: sun
+    id: sunset
+  - trigger: sun
+    event: sunrise
+    id: sunrise
+conditions: []
+actions:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id: sunset
+        sequence:
+          - action: select.select_option
+            metadata: {}
+            target:
+              entity_id: select.ds_2cd2387g2_lu_192_168_8_127_shutter_speed
+            data:
+              option: 1/120
+          - data:
+              message: HK .127 Sunset
+              data:
+                sound: 3rdParty_Failure_Haptic.caf
+            action: notify.mobile_app_jdc_iphone_15_pro
+      - conditions:
+          - condition: trigger
+            id: sunrise
+        sequence:
+          - action: select.select_option
+            metadata: {}
+            target:
+              entity_id: select.ds_2cd2387g2_lu_192_168_8_127_shutter_speed
+            data:
+              option: 1/150
+          - data:
+              message: HK .127 Sunrise
+              data:
+                sound: 3rdParty_Failure_Haptic.caf
+            action: notify.mobile_app_jdc_iphone_15_pro
+mode: single
 ```
 
 ### Motion Alert → Supplement Light Blast
 
-Crank the light to full brightness on a motion or person detection event, then drop it back down. Works with any NVR or motion sensor — Frigate, Scrypted, SecuritySpy, or a simple binary sensor. Assumes Supplement Light is set to "White Light", Brightness Mode is "Manual", and Day/Night Mode is "Night" or "Auto" in dark conditions (see [Supplement Light vs. Day/Night Mode](#supplement-light-vs-daynight-mode)):
+Crank the light to full brightness on a motion or person detection event, then drop it back down. Works with any NVR or motion sensor — Frigate, Scrypted, SecuritySpy, or a simple binary sensor. Assumes Supplement Light is set to "White Light", Brightness Mode is "Manual", and Day/Night Mode is "Night" or "Auto" in dark conditions (see [Supplement Light vs. Day/Night Mode](#supplement-light-vs-daynight-mode)): (Sample automation by Claude)
 
 ```yaml
 automation:
