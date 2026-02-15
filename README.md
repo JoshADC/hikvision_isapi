@@ -5,6 +5,11 @@ A Home Assistant custom integration that exposes **every image and exposure sett
 
 ***Heads up that this was almost entirely vibe-coded by a grumpy truck driver who can barely format a shell command working with a very patient Claude Code, who also wrote most of this README. ***
 
+First, for any of this to work, you can't use this scene-switching stuff in the camera's UI. The reason for making this integration was getting away from the camera's internal scheduling, but heads up that you can't use both at the same time.
+
+<img width="1185" height="383" alt="Screenshot 2026-02-15 at 14 06 15" src="https://github.com/user-attachments/assets/11d8b832-5887-4f9d-b8a3-744046949cb7" />
+
+
 ## Why?
 
 Most Hikvision cameras, or at least the one's I've tried, have no true auto exposure that I can find. Shutter speed and gain are fixed manual values, not adaptive limits. A single shutter speed that works at midnight is blown out and unsable at noon.
