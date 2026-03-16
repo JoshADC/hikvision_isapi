@@ -16,6 +16,7 @@ require. Raw string manipulation is the only reliable approach.
 
 from __future__ import annotations
 
+import asyncio
 import logging
 import re
 import xml.etree.ElementTree as ET
@@ -81,7 +82,8 @@ class ISAPIClient:
 
     async def _ensure_client(self) -> httpx.AsyncClient:
         if self._client is None or self._client.is_closed:
-            self._client = httpx.AsyncClient(
+            self._client = await asyncio.to_thread(
+                httpx.AsyncClient,
                 auth=self._auth,
                 timeout=TIMEOUT,
                 follow_redirects=True,
