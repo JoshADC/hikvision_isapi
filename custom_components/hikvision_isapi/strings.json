@@ -9,6 +9,15 @@
           "username": "Username",
           "password": "Password"
         }
+      },
+      "reconfigure": {
+        "title": "Reconfigure Hikvision Camera",
+        "description": "Update the camera's IP address or credentials. The new settings must connect to the same physical camera as the original entry.",
+        "data": {
+          "host": "Host",
+          "username": "Username",
+          "password": "Password"
+        }
       }
     },
     "error": {
@@ -17,7 +26,9 @@
       "unknown": "An unexpected error occurred."
     },
     "abort": {
-      "already_configured": "This camera is already configured."
+      "already_configured": "This camera is already configured.",
+      "reconfigure_successful": "Camera credentials updated.",
+      "unique_id_mismatch": "The settings you entered connect to a different camera than the one being reconfigured. To switch to a different camera, delete this entry and add it again."
     }
   }
 }

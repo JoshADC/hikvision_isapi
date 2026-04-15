@@ -292,6 +292,7 @@ Probed ~40 endpoints on .126 — no ambient light/lux reading exposed. The camer
 - VCA select entity (with reboot warning)
 - ~~Fix blocking `load_verify_locations` warning~~ — Fixed in v1.1.0
 - ~~Clearer error message when camera user lacks write privileges~~ — Fixed in v1.1.1 (HTTP 403 now surfaces a permission hint pointing users to the camera's web UI; diagnosed from issue #2)
+- ~~Reconfigure flow for existing entries~~ — Added in v1.2.0 (three-dot menu → Reconfigure lets users change host/credentials without delete+re-add; MAC-match safety check prevents repointing an entry at a different camera)
 - Disable single-option selects by default
 - HACS repo structure, README, documentation
 - Sample automations (day/night exposure profiles, Frigate alert → supplement light blast)
