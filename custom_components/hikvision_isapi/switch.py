@@ -68,5 +68,5 @@ class HikvisionISAPISwitch(HikvisionISAPIEntity, SwitchEntity):
                 "Failed to set %s=%s: %s",
                 self._descriptor.path,
                 value,
-                result.sub_status,
+                result.error_description,
             )

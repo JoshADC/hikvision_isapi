@@ -84,7 +84,7 @@ async def put_with_prerequisites(
                 "PUT %s=%s failed with unresolvable error: %s",
                 path,
                 value,
-                result.sub_status,
+                result.error_description,
             )
             return result
 
@@ -102,7 +102,7 @@ async def put_with_prerequisites(
             _LOGGER.warning(
                 "Failed to disable prerequisite %s: %s",
                 resolution,
-                prereq_result.sub_status,
+                prereq_result.error_description,
             )
             return prereq_result
 

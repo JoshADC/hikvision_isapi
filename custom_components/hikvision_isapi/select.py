@@ -94,7 +94,7 @@ class HikvisionISAPISelect(HikvisionISAPIEntity, SelectEntity):
                 "Failed to set %s=%s: %s",
                 self._descriptor.path,
                 raw_value,
-                result.sub_status,
+                result.error_description,
             )
 
     async def _set_linked_mode(self, raw_value: str):

@@ -69,6 +69,23 @@ class PutResult:
             sub_status=sub_status,
         )
 
+    @property
+    def error_description(self) -> str:
+        """Human-readable error with a permission hint when applicable.
+
+        HTTP 403 on ISAPI nearly always means the user account lacks write
+        privileges on the camera — Hikvision enforces per-user privileges at
+        the endpoint level, and the error code the firmware returns varies
+        (lowPrivilege, notSupport, etc.) even when the root cause is the same.
+        """
+        if self.status_code == 403:
+            return (
+                f"{self.sub_status} — permission denied. Check that the HA "
+                "user has write privileges in the camera's web UI "
+                "(Hikvision is picky about per-user permissions)."
+            )
+        return self.sub_status
+
 
 class ISAPIClient:
     """Async HTTP client for Hikvision ISAPI with digest auth."""
@@ -192,7 +209,7 @@ class ISAPIClient:
             _LOGGER.warning(
                 "PUT failed for %s: %s (HTTP %d)",
                 changes,
-                result.sub_status,
+                result.error_description,
                 result.status_code,
             )
 
@@ -263,7 +280,7 @@ class ISAPIClient:
                 enabled_path,
                 mode_path,
                 mode_value,
-                result.sub_status,
+                result.error_description,
                 result.status_code,
             )
 
