@@ -205,6 +205,45 @@ class ISAPIClient:
         root = ET.fromstring(resp.content)
         result = PutResult.from_xml(root, resp.status_code)
 
+        # Some camera models (e.g. DS-2CD3367WDP2V2-L) reject writes to the
+        # main ImageChannel endpoint but accept writes to sub-endpoints like
+        # /ISAPI/Image/channels/1/Shutter. If we get notSupport on a single
+        # field change, retry using the sub-endpoint.
+        if not result.success and result.sub_status == "notSupport" and len(changes) == 1:
+            path, value = next(iter(changes.items()))
+            top_level_tag = path.split("/")[0]
+            sub_url = f"{self.base_url}/ISAPI/Image/channels/{self.channel}/{top_level_tag}"
+            _LOGGER.debug(
+                "Main endpoint returned notSupport for %s, retrying via sub-endpoint %s",
+                path,
+                sub_url,
+            )
+            raw_sub = await self._get_raw(f"/ISAPI/Image/channels/{self.channel}/{top_level_tag}")
+            xml_sub = raw_sub.decode("utf-8")
+            tree_sub = ET.fromstring(raw_sub)
+            leaf_path = "/".join(path.split("/")[1:]) if "/" in path else path
+            elem = _find_by_path(tree_sub, leaf_path)
+            if elem is not None:
+                old_val = elem.text or ""
+                xml_sub = _raw_replace(xml_sub, leaf_path, old_val, value)
+            resp = await client.put(
+                sub_url,
+                content=xml_sub.encode("utf-8"),
+                headers={"Content-Type": "application/xml"},
+            )
+            root = ET.fromstring(resp.content)
+            result = PutResult.from_xml(root, resp.status_code)
+            if not result.success:
+                _LOGGER.warning(
+                    "PUT failed via sub-endpoint for %s: %s (HTTP %d)",
+                    changes,
+                    result.error_description,
+                    resp.status_code,
+                )
+            else:
+                _LOGGER.debug("Sub-endpoint PUT succeeded for %s", path)
+            return result
+
         if not result.success:
             _LOGGER.warning(
                 "PUT failed for %s: %s (HTTP %d)",
@@ -273,6 +312,51 @@ class ISAPIClient:
 
         root = ET.fromstring(resp.content)
         result = PutResult.from_xml(root, resp.status_code)
+
+# Fallback to sub-endpoint if main endpoint returns notSupport
+        if not result.success and result.sub_status == "notSupport":
+            top_level_tag = enabled_path.split("/")[0]
+            sub_url = f"{self.base_url}/ISAPI/Image/channels/{self.channel}/{top_level_tag}"
+            _LOGGER.debug(
+                "Main endpoint returned notSupport for enable %s + %s=%s, retrying via sub-endpoint %s",
+                enabled_path,
+                mode_path,
+                mode_value,
+                sub_url,
+            )
+            raw_sub = await self._get_raw(f"/ISAPI/Image/channels/{self.channel}/{top_level_tag}")
+            xml_sub = raw_sub.decode("utf-8")
+            tree_sub = ET.fromstring(raw_sub)
+            enabled_leaf = "/".join(enabled_path.split("/")[1:]) if "/" in enabled_path else enabled_path
+            mode_leaf = "/".join(mode_path.split("/")[1:]) if "/" in mode_path else mode_path
+            enabled_elem = _find_by_path(tree_sub, enabled_leaf)
+            if enabled_elem is not None:
+                old_enabled = enabled_elem.text or ""
+                if old_enabled != "true":
+                    xml_sub = _raw_replace(xml_sub, enabled_leaf, old_enabled, "true")
+            mode_elem = _find_by_path(tree_sub, mode_leaf)
+            if mode_elem is not None:
+                old_mode = mode_elem.text or ""
+                xml_sub = _raw_replace(xml_sub, mode_leaf, old_mode, mode_value)
+            resp = await client.put(
+                sub_url,
+                content=xml_sub.encode("utf-8"),
+                headers={"Content-Type": "application/xml"},
+            )
+            root = ET.fromstring(resp.content)
+            result = PutResult.from_xml(root, resp.status_code)
+            if not result.success:
+                _LOGGER.warning(
+                    "PUT failed via sub-endpoint for enable %s + %s=%s: %s (HTTP %d)",
+                    enabled_path,
+                    mode_path,
+                    mode_value,
+                    result.error_description,
+                    resp.status_code,
+                )
+            else:
+                _LOGGER.debug("Sub-endpoint PUT succeeded for enable %s + %s=%s", enabled_path, mode_path, mode_value)
+            return result
 
         if not result.success:
             _LOGGER.warning(
