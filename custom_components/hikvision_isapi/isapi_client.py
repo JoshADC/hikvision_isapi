@@ -205,6 +205,8 @@ class ISAPIClient:
         if old_val != value:
             xml_sub = _raw_replace(xml_sub, leaf_path, old_val, value)
 
+        _LOGGER.debug("PUT BODY (sub-endpoint %s):\n%s", sub_path, xml_sub)
+      
         resp = await client.put(
             f"{self.base_url}{sub_path}",
             content=xml_sub.encode("utf-8"),
@@ -279,6 +281,9 @@ class ISAPIClient:
         # PUT the minimally-modified XML back
         client = await self._ensure_client()
         url = f"{self.base_url}/ISAPI/Image/channels/{self.channel}"
+
+        _LOGGER.debug("PUT BODY (main endpoint):\n%s", xml_str)
+      
         resp = await client.put(
             url,
             content=xml_str.encode("utf-8"),
@@ -366,6 +371,9 @@ class ISAPIClient:
         # PUT
         client = await self._ensure_client()
         url = f"{self.base_url}/ISAPI/Image/channels/{self.channel}"
+
+        _LOGGER.debug("PUT BODY (enable main):\n%s", xml_str)
+      
         resp = await client.put(
             url,
             content=xml_str.encode("utf-8"),
@@ -422,6 +430,8 @@ class ISAPIClient:
                 )
                 xml_sub = _raw_insert_after(xml_sub, enabled_leaf, mode_leaf, mode_value)
 
+            _LOGGER.debug("PUT BODY (enable sub %s):\n%s", sub_path, xml_sub)
+          
             resp = await client.put(
                 f"{self.base_url}{sub_path}",
                 content=xml_sub.encode("utf-8"),
