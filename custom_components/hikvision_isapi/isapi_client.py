@@ -15,7 +15,7 @@ cameras only accept writes to sub-endpoints like /ISAPI/Image/channels/1/Shutter
 When the full endpoint returns notSupport on a single-field change, we
 automatically retry via the appropriate sub-endpoint.
 
-IMPORTANT: We CANNOT use ET.tostring() for PUT bodies — ElementTree normalizes
+IMPORTANT: We CANNOT use ET.tostring() for PUT bodies -- ElementTree normalizes
 away the repeated xmlns declarations on child elements that Hikvision cameras
 require. Raw string manipulation is the only reliable approach.
 """
@@ -178,20 +178,32 @@ class ISAPIClient:
             _LOGGER.warning(
                 "Sub-endpoint GET failed for %s: %s", sub_path, err
             )
-            return PutResult(success=False, status_code=err.response.status_code, sub_status="subEndpointGetFailed")
+            return PutResult(
+                success=False,
+                status_code=err.response.status_code,
+                sub_status="subEndpointGetFailed",
+            )
 
         xml_sub = raw_sub.decode("utf-8")
         tree_sub = ET.fromstring(raw_sub)
 
         elem = _find_by_path(tree_sub, leaf_path)
-        if elem is not None:
-            old_val = elem.text or ""
-            if old_val != value:
-                xml_sub = _raw_replace(xml_sub, leaf_path, old_val, value)
-        else:
+        if elem is None:
+            # Avoid silent no-op: PUTting unmodified XML would return 200
+            # but nothing would actually change on the camera.
             _LOGGER.warning(
-                "Path %s not found in sub-endpoint XML for %s", leaf_path, sub_path
+                "Path %s not found in sub-endpoint XML for %s -- aborting PUT",
+                leaf_path, sub_path,
             )
+            return PutResult(
+                success=False,
+                status_code=0,
+                sub_status="pathNotFoundInSubEndpoint",
+            )
+
+        old_val = elem.text or ""
+        if old_val != value:
+            xml_sub = _raw_replace(xml_sub, leaf_path, old_val, value)
 
         resp = await client.put(
             f"{self.base_url}{sub_path}",
@@ -382,8 +394,11 @@ class ISAPIClient:
                 _LOGGER.warning(
                     "Sub-endpoint GET failed for %s: %s", sub_path, err
                 )
-                result = PutResult(success=False, status_code=err.response.status_code, sub_status="subEndpointGetFailed")
-                return result
+                return PutResult(
+                    success=False,
+                    status_code=err.response.status_code,
+                    sub_status="subEndpointGetFailed",
+                )
 
             xml_sub = raw_sub.decode("utf-8")
             tree_sub = ET.fromstring(raw_sub)
@@ -394,11 +409,17 @@ class ISAPIClient:
                 if old_enabled != "true":
                     xml_sub = _raw_replace(xml_sub, enabled_leaf, old_enabled, "true")
 
+            # Mirror the insert-after behavior from the main path so that
+            # absent mode tags are handled correctly in sub-endpoint XML too.
             mode_elem = _find_by_path(tree_sub, mode_leaf)
             if mode_elem is not None:
                 old_mode = mode_elem.text or ""
                 xml_sub = _raw_replace(xml_sub, mode_leaf, old_mode, mode_value)
             else:
+                _LOGGER.debug(
+                    "Inserting %s = %s (tag was absent in sub-endpoint XML)",
+                    mode_leaf, mode_value,
+                )
                 xml_sub = _raw_insert_after(xml_sub, enabled_leaf, mode_leaf, mode_value)
 
             resp = await client.put(
