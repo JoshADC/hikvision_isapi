@@ -15,7 +15,7 @@ cameras only accept writes to sub-endpoints like /ISAPI/Image/channels/1/Shutter
 When the full endpoint returns notSupport on a single-field change, we
 automatically retry via the appropriate sub-endpoint.
 
-IMPORTANT: We CANNOT use ET.tostring() for PUT bodies -- ElementTree normalizes
+IMPORTANT: We CANNOT use ET.tostring() for PUT bodies — ElementTree normalizes
 away the repeated xmlns declarations on child elements that Hikvision cameras
 require. Raw string manipulation is the only reliable approach.
 """
@@ -80,13 +80,13 @@ class PutResult:
         """Human-readable error description.
 
         HTTP 403 on ISAPI nearly always means the user account lacks write
-        privileges on the camera -- Hikvision enforces per-user privileges at
+        privileges on the camera — Hikvision enforces per-user privileges at
         the endpoint level, and the error code the firmware returns varies
         (lowPrivilege, notSupport, etc.) even when the root cause is the same.
         """
         if self.status_code == 403:
             return (
-                f"{self.sub_status} -- permission denied. Check that the HA "
+                f"{self.sub_status} — permission denied. Check that the HA "
                 "user has write privileges in the camera's web UI "
                 "(Hikvision is picky about per-user permissions)."
             )
@@ -192,7 +192,7 @@ class ISAPIClient:
             # Avoid silent no-op: PUTting unmodified XML would return 200
             # but nothing would actually change on the camera.
             _LOGGER.warning(
-                "Path %s not found in sub-endpoint XML for %s -- aborting PUT",
+                "Path %s not found in sub-endpoint XML for %s — aborting PUT",
                 leaf_path, sub_path,
             )
             return PutResult(
@@ -206,7 +206,7 @@ class ISAPIClient:
             xml_sub = _raw_replace(xml_sub, leaf_path, old_val, value)
 
         _LOGGER.debug("PUT BODY (sub-endpoint %s):\n%s", sub_path, xml_sub)
-      
+
         resp = await client.put(
             f"{self.base_url}{sub_path}",
             content=xml_sub.encode("utf-8"),
@@ -283,7 +283,7 @@ class ISAPIClient:
         url = f"{self.base_url}/ISAPI/Image/channels/{self.channel}"
 
         _LOGGER.debug("PUT BODY (main endpoint):\n%s", xml_str)
-      
+
         resp = await client.put(
             url,
             content=xml_str.encode("utf-8"),
@@ -373,7 +373,7 @@ class ISAPIClient:
         url = f"{self.base_url}/ISAPI/Image/channels/{self.channel}"
 
         _LOGGER.debug("PUT BODY (enable main):\n%s", xml_str)
-      
+
         resp = await client.put(
             url,
             content=xml_str.encode("utf-8"),
@@ -431,7 +431,7 @@ class ISAPIClient:
                 xml_sub = _raw_insert_after(xml_sub, enabled_leaf, mode_leaf, mode_value)
 
             _LOGGER.debug("PUT BODY (enable sub %s):\n%s", sub_path, xml_sub)
-          
+
             resp = await client.put(
                 f"{self.base_url}{sub_path}",
                 content=xml_sub.encode("utf-8"),
@@ -570,7 +570,7 @@ def _find_by_path(root: ET.Element, path: str) -> Optional[ET.Element]:
 
 
 def _strip_ns(tag: str) -> str:
-    """Strip XML namespace: {http://...}Tag -> Tag."""
+    """Strip XML namespace: {http://...}Tag → Tag."""
     if tag.startswith("{"):
         return tag.split("}", 1)[1]
     return tag
