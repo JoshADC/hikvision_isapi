@@ -3,11 +3,17 @@
 Handles digest authentication, XML fetching, and read-modify-write for
 /ISAPI/Image/channels/1 endpoints. Uses httpx for async HTTP with digest auth.
 
-The camera requires the FULL ImageChannel XML on every PUT — partial documents
+Most cameras require the FULL ImageChannel XML on every PUT — partial documents
 are rejected with Device Error. So every write is a read-modify-write cycle:
   1. GET current full XML (raw bytes)
   2. Find and replace target values in the raw string (preserving exact XML)
   3. PUT the barely-modified document back
+
+However, some camera models (e.g. DS-2CD3367WDP2V2-L) reject ALL writes to
+/ISAPI/Image/channels/1 with notSupport, even with unmodified XML. These
+cameras only accept writes to sub-endpoints like /ISAPI/Image/channels/1/Shutter.
+When the full endpoint returns notSupport on a single-field change, we
+automatically retry via the appropriate sub-endpoint.
 
 IMPORTANT: We CANNOT use ET.tostring() for PUT bodies — ElementTree normalizes
 away the repeated xmlns declarations on child elements that Hikvision cameras
@@ -71,7 +77,7 @@ class PutResult:
 
     @property
     def error_description(self) -> str:
-        """Human-readable error with a permission hint when applicable.
+        """Human-readable error description.
 
         HTTP 403 on ISAPI nearly always means the user account lacks write
         privileges on the camera — Hikvision enforces per-user privileges at
@@ -149,6 +155,80 @@ class ISAPIClient:
         """Fetch current image settings XML for the channel."""
         return await self._get(f"/ISAPI/Image/channels/{self.channel}")
 
+    async def _put_via_sub_endpoint(
+        self, top_level_tag: str, leaf_path: str, value: str
+    ) -> PutResult:
+        """PUT a single setting via the top-level sub-endpoint.
+
+        Used as a fallback for cameras that reject writes to the full
+        ImageChannel endpoint. Fetches the sub-endpoint XML, modifies
+        the target field, and PUTs it back to the sub-endpoint.
+
+        For example, for path "Shutter/ShutterLevel":
+          top_level_tag = "Shutter"
+          leaf_path = "ShutterLevel"
+          sub-endpoint = /ISAPI/Image/channels/1/Shutter
+        """
+        sub_path = f"/ISAPI/Image/channels/{self.channel}/{top_level_tag}"
+        client = await self._ensure_client()
+
+        try:
+            raw_sub = await self._get_raw(sub_path)
+        except httpx.HTTPStatusError as err:
+            _LOGGER.warning(
+                "Sub-endpoint GET failed for %s: %s", sub_path, err
+            )
+            return PutResult(
+                success=False,
+                status_code=err.response.status_code,
+                sub_status="subEndpointGetFailed",
+            )
+
+        xml_sub = raw_sub.decode("utf-8")
+        tree_sub = ET.fromstring(raw_sub)
+
+        elem = _find_by_path(tree_sub, leaf_path)
+        if elem is None:
+            # Avoid silent no-op: PUTting unmodified XML would return 200
+            # but nothing would actually change on the camera.
+            _LOGGER.warning(
+                "Path %s not found in sub-endpoint XML for %s — aborting PUT",
+                leaf_path, sub_path,
+            )
+            return PutResult(
+                success=False,
+                status_code=0,
+                sub_status="pathNotFoundInSubEndpoint",
+            )
+
+        old_val = elem.text or ""
+        if old_val != value:
+            xml_sub = _raw_replace(xml_sub, leaf_path, old_val, value)
+
+        _LOGGER.debug("PUT BODY (sub-endpoint %s):\n%s", sub_path, xml_sub)
+
+        resp = await client.put(
+            f"{self.base_url}{sub_path}",
+            content=xml_sub.encode("utf-8"),
+            headers={"Content-Type": "application/xml"},
+        )
+        root = ET.fromstring(resp.content)
+        result = PutResult.from_xml(root, resp.status_code)
+
+        if result.success:
+            _LOGGER.debug(
+                "Sub-endpoint PUT succeeded for %s/%s = %s",
+                top_level_tag, leaf_path, value,
+            )
+        else:
+            _LOGGER.warning(
+                "Sub-endpoint PUT failed for %s/%s = %s: %s (HTTP %d)",
+                top_level_tag, leaf_path, value,
+                result.error_description, result.status_code,
+            )
+
+        return result
+
     async def put_setting(
         self, path: str, value: str
     ) -> PutResult:
@@ -167,6 +247,11 @@ class ISAPIClient:
         Uses raw string manipulation to preserve the exact XML format the
         camera sends (including repeated xmlns declarations on child elements).
         ET.tostring() mangles these, causing the camera to reject with deviceError.
+
+        If the full endpoint returns notSupport on a single-field change, the
+        write is automatically retried via the appropriate sub-endpoint. This
+        handles cameras like the DS-2CD3367WDP2V2-L which reject all writes to
+        the full ImageChannel endpoint but accept writes to sub-endpoints.
         """
         # Read current full XML
         raw = await self._get_raw(
@@ -196,6 +281,9 @@ class ISAPIClient:
         # PUT the minimally-modified XML back
         client = await self._ensure_client()
         url = f"{self.base_url}/ISAPI/Image/channels/{self.channel}"
+
+        _LOGGER.debug("PUT BODY (main endpoint):\n%s", xml_str)
+
         resp = await client.put(
             url,
             content=xml_str.encode("utf-8"),
@@ -204,6 +292,21 @@ class ISAPIClient:
 
         root = ET.fromstring(resp.content)
         result = PutResult.from_xml(root, resp.status_code)
+
+        # Some cameras (e.g. DS-2CD3367WDP2V2-L) reject all writes to the full
+        # ImageChannel endpoint with notSupport, even with unmodified XML. These
+        # cameras only accept writes to sub-endpoints. Retry via sub-endpoint
+        # when we get notSupport on a single-field change.
+        if not result.success and result.sub_status == "notSupport" and len(changes) == 1:
+            path, value = next(iter(changes.items()))
+            parts = path.split("/")
+            top_level_tag = parts[0]
+            leaf_path = "/".join(parts[1:]) if len(parts) > 1 else path
+            _LOGGER.debug(
+                "Full endpoint returned notSupport for %s, retrying via sub-endpoint",
+                path,
+            )
+            return await self._put_via_sub_endpoint(top_level_tag, leaf_path, value)
 
         if not result.success:
             _LOGGER.warning(
@@ -225,6 +328,9 @@ class ISAPIClient:
 
         Handles the case where the mode tag doesn't exist in the XML when
         the feature is disabled (e.g., BLCMode disappears when BLC is off).
+
+        If the full endpoint returns notSupport, retries via the sub-endpoint
+        for the top-level tag of enabled_path.
         """
         raw = await self._get_raw(
             f"/ISAPI/Image/channels/{self.channel}"
@@ -265,6 +371,9 @@ class ISAPIClient:
         # PUT
         client = await self._ensure_client()
         url = f"{self.base_url}/ISAPI/Image/channels/{self.channel}"
+
+        _LOGGER.debug("PUT BODY (enable main):\n%s", xml_str)
+
         resp = await client.put(
             url,
             content=xml_str.encode("utf-8"),
@@ -273,6 +382,76 @@ class ISAPIClient:
 
         root = ET.fromstring(resp.content)
         result = PutResult.from_xml(root, resp.status_code)
+
+        # Retry via sub-endpoint if full endpoint returns notSupport.
+        # For put_setting_with_enable the sub-endpoint is the top-level block
+        # of enabled_path (e.g. "BLC" for "BLC/enabled").
+        if not result.success and result.sub_status == "notSupport":
+            top_level_tag = enabled_path.split("/")[0]
+            enabled_leaf = "/".join(enabled_path.split("/")[1:]) if "/" in enabled_path else enabled_path
+            mode_leaf = "/".join(mode_path.split("/")[1:]) if "/" in mode_path else mode_path
+            _LOGGER.debug(
+                "Full endpoint returned notSupport for enable %s + %s=%s, retrying via sub-endpoint",
+                enabled_path, mode_path, mode_value,
+            )
+
+            sub_path = f"/ISAPI/Image/channels/{self.channel}/{top_level_tag}"
+            try:
+                raw_sub = await self._get_raw(sub_path)
+            except httpx.HTTPStatusError as err:
+                _LOGGER.warning(
+                    "Sub-endpoint GET failed for %s: %s", sub_path, err
+                )
+                return PutResult(
+                    success=False,
+                    status_code=err.response.status_code,
+                    sub_status="subEndpointGetFailed",
+                )
+
+            xml_sub = raw_sub.decode("utf-8")
+            tree_sub = ET.fromstring(raw_sub)
+
+            enabled_elem = _find_by_path(tree_sub, enabled_leaf)
+            if enabled_elem is not None:
+                old_enabled = enabled_elem.text or ""
+                if old_enabled != "true":
+                    xml_sub = _raw_replace(xml_sub, enabled_leaf, old_enabled, "true")
+
+            # Mirror the insert-after behavior from the main path so that
+            # absent mode tags are handled correctly in sub-endpoint XML too.
+            mode_elem = _find_by_path(tree_sub, mode_leaf)
+            if mode_elem is not None:
+                old_mode = mode_elem.text or ""
+                xml_sub = _raw_replace(xml_sub, mode_leaf, old_mode, mode_value)
+            else:
+                _LOGGER.debug(
+                    "Inserting %s = %s (tag was absent in sub-endpoint XML)",
+                    mode_leaf, mode_value,
+                )
+                xml_sub = _raw_insert_after(xml_sub, enabled_leaf, mode_leaf, mode_value)
+
+            _LOGGER.debug("PUT BODY (enable sub %s):\n%s", sub_path, xml_sub)
+
+            resp = await client.put(
+                f"{self.base_url}{sub_path}",
+                content=xml_sub.encode("utf-8"),
+                headers={"Content-Type": "application/xml"},
+            )
+            root = ET.fromstring(resp.content)
+            result = PutResult.from_xml(root, resp.status_code)
+
+            if result.success:
+                _LOGGER.debug(
+                    "Sub-endpoint PUT succeeded for enable %s + %s=%s",
+                    enabled_path, mode_path, mode_value,
+                )
+            else:
+                _LOGGER.warning(
+                    "Sub-endpoint PUT failed for enable %s + %s=%s: %s (HTTP %d)",
+                    enabled_path, mode_path, mode_value,
+                    result.error_description, result.status_code,
+                )
+            return result
 
         if not result.success:
             _LOGGER.warning(
