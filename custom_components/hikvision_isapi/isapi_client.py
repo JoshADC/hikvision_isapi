@@ -1,7 +1,14 @@
 """Async ISAPI client for Hikvision cameras.
 
-Handles digest authentication, XML fetching, and read-modify-write for
-/ISAPI/Image/channels/1 endpoints. Uses httpx for async HTTP with digest auth.
+Handles authentication, XML fetching, and read-modify-write for
+/ISAPI/Image/channels/1 endpoints. Uses httpx for async HTTP.
+
+Auth: digest first, basic as fallback. Modern cameras use digest auth, but
+some old models (e.g. DS-2CD8464F-EI) only support basic auth and return
+401 to every digest attempt. When a 401 comes back and the camera's
+WWW-Authenticate challenge offers Basic (or is absent), we retry the same
+request with basic auth; if that succeeds, the client switches to basic for
+the rest of the session. Equivalent to curl's --anyauth.
 
 Most cameras require the FULL ImageChannel XML on every PUT — partial documents
 are rejected with Device Error. So every write is a read-modify-write cycle:
@@ -94,20 +101,23 @@ class PutResult:
 
 
 class ISAPIClient:
-    """Async HTTP client for Hikvision ISAPI with digest auth."""
+    """Async HTTP client for Hikvision ISAPI (digest auth, basic fallback)."""
 
     def __init__(self, host: str, username: str, password: str, channel: int = 1):
         self.host = host
         self.base_url = f"http://{host}"
         self.channel = channel
-        self._auth = httpx.DigestAuth(username, password)
+        self._digest_auth = httpx.DigestAuth(username, password)
+        self._basic_auth = httpx.BasicAuth(username, password)
+        self._auth = self._digest_auth
         self._client: Optional[httpx.AsyncClient] = None
 
     async def _ensure_client(self) -> httpx.AsyncClient:
         if self._client is None or self._client.is_closed:
+            # Auth is passed per-request (not here) so a single client can
+            # switch from digest to basic mid-session.
             self._client = await asyncio.to_thread(
                 httpx.AsyncClient,
-                auth=self._auth,
                 timeout=TIMEOUT,
                 follow_redirects=True,
             )
@@ -118,18 +128,46 @@ class ISAPIClient:
             await self._client.aclose()
             self._client = None
 
-    async def _get(self, path: str) -> ET.Element:
+    async def _request(self, method: str, path: str, **kwargs) -> httpx.Response:
+        """Send a request with the current auth, falling back to basic on 401.
+
+        Old cameras that don't support digest reply 401 with a Basic-only
+        WWW-Authenticate challenge (or none at all). Only then do we retry
+        with basic — a 401 from a camera that offers Digest means the
+        credentials are wrong, and retrying would just burn another failed
+        login attempt toward Hikvision's account lockout.
+        """
         client = await self._ensure_client()
         url = f"{self.base_url}{path}"
-        resp = await client.get(url)
+        resp = await client.request(method, url, auth=self._auth, **kwargs)
+
+        if resp.status_code == 401 and self._auth is not self._basic_auth:
+            challenge = resp.headers.get("WWW-Authenticate", "")
+            if "digest" not in challenge.lower():
+                _LOGGER.debug(
+                    "Digest auth rejected by %s (challenge: %r), retrying with basic auth",
+                    self.host, challenge,
+                )
+                basic_resp = await client.request(
+                    method, url, auth=self._basic_auth, **kwargs
+                )
+                if basic_resp.status_code != 401:
+                    _LOGGER.info(
+                        "Camera %s does not support digest auth; switched to basic auth",
+                        self.host,
+                    )
+                    self._auth = self._basic_auth
+                    return basic_resp
+        return resp
+
+    async def _get(self, path: str) -> ET.Element:
+        resp = await self._request("GET", path)
         resp.raise_for_status()
         return ET.fromstring(resp.content)
 
     async def _get_raw(self, path: str) -> bytes:
         """GET and return raw bytes (preserves XML exactly as camera sends it)."""
-        client = await self._ensure_client()
-        url = f"{self.base_url}{path}"
-        resp = await client.get(url)
+        resp = await self._request("GET", path)
         resp.raise_for_status()
         return resp.content
 
@@ -170,7 +208,6 @@ class ISAPIClient:
           sub-endpoint = /ISAPI/Image/channels/1/Shutter
         """
         sub_path = f"/ISAPI/Image/channels/{self.channel}/{top_level_tag}"
-        client = await self._ensure_client()
 
         try:
             raw_sub = await self._get_raw(sub_path)
@@ -207,8 +244,9 @@ class ISAPIClient:
 
         _LOGGER.debug("PUT BODY (sub-endpoint %s):\n%s", sub_path, xml_sub)
 
-        resp = await client.put(
-            f"{self.base_url}{sub_path}",
+        resp = await self._request(
+            "PUT",
+            sub_path,
             content=xml_sub.encode("utf-8"),
             headers={"Content-Type": "application/xml"},
         )
@@ -279,13 +317,11 @@ class ISAPIClient:
             element.text = new_value
 
         # PUT the minimally-modified XML back
-        client = await self._ensure_client()
-        url = f"{self.base_url}/ISAPI/Image/channels/{self.channel}"
-
         _LOGGER.debug("PUT BODY (main endpoint):\n%s", xml_str)
 
-        resp = await client.put(
-            url,
+        resp = await self._request(
+            "PUT",
+            f"/ISAPI/Image/channels/{self.channel}",
             content=xml_str.encode("utf-8"),
             headers={"Content-Type": "application/xml"},
         )
@@ -369,13 +405,11 @@ class ISAPIClient:
             )
 
         # PUT
-        client = await self._ensure_client()
-        url = f"{self.base_url}/ISAPI/Image/channels/{self.channel}"
-
         _LOGGER.debug("PUT BODY (enable main):\n%s", xml_str)
 
-        resp = await client.put(
-            url,
+        resp = await self._request(
+            "PUT",
+            f"/ISAPI/Image/channels/{self.channel}",
             content=xml_str.encode("utf-8"),
             headers={"Content-Type": "application/xml"},
         )
@@ -432,8 +466,9 @@ class ISAPIClient:
 
             _LOGGER.debug("PUT BODY (enable sub %s):\n%s", sub_path, xml_sub)
 
-            resp = await client.put(
-                f"{self.base_url}{sub_path}",
+            resp = await self._request(
+                "PUT",
+                sub_path,
                 content=xml_sub.encode("utf-8"),
                 headers={"Content-Type": "application/xml"},
             )

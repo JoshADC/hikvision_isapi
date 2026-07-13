@@ -121,6 +121,12 @@ Copy the `custom_components/hikvision_isapi` folder to your Home Assistant `conf
 3. Enter your camera's IP address, username, and password (admin credentials required)
 4. Entities are auto-created based on your camera's capabilities
 
+To change the IP or credentials later, use the three-dot menu on the integration entry → **Reconfigure**.
+
+## Troubleshooting
+
+If writes fail with a `lowPrivilege` / permission-denied error in the HA logs, the camera user needs write privileges in the camera's web UI. Hikvision is picky about per-user permissions — even "admin"-style accounts sometimes lack the Remote: Parameters/Configuration bit. Log into the camera's web UI, edit the user, and make sure remote configuration privileges are enabled.
+
 ## Example Automations
 
 ### Day/Night Exposure Profiles
@@ -201,7 +207,7 @@ automation:
 
 ## Technical Details
 
-- **Protocol:** ISAPI over HTTP with digest authentication
+- **Protocol:** ISAPI over HTTP with digest authentication (automatic fallback to basic auth for old cameras like the DS-2CD8464F-EI that don't support digest)
 - **Polling:** Current values polled every 30 seconds (configurable in future release)
 - **Write method:** Read-modify-write with raw XML string manipulation (ElementTree re-serialization mangles Hikvision's repeated xmlns declarations, causing the camera to reject PUTs)
 - **Conflict resolution:** Two-step sequential PUTs — camera validates against current state, not the PUT body
