@@ -1,0 +1,255 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Se connecter à la caméra Hikvision",
+        "description": "Entrez l'adresse IP de la caméra et les identifiants administrateur. L'authentification Digest sera utilisée.",
+        "data": {
+          "host": "Hôte",
+          "username": "Nom d'utilisateur",
+          "password": "Mot de passe"
+        }
+      },
+      "reconfigure": {
+        "title": "Reconfigurer la caméra Hikvision",
+        "description": "Mettez à jour l'adresse IP ou les identifiants de la caméra. Les nouveaux paramètres doivent se connecter à la même caméra physique que l'entrée d'origine.",
+        "data": {
+          "host": "Hôte",
+          "username": "Nom d'utilisateur",
+          "password": "Mot de passe"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Échec de la connexion à la caméra. Vérifiez l'adresse IP et assurez-vous que la caméra est accessible.",
+      "invalid_auth": "Identifiants invalides. Vérifiez le nom d'utilisateur et le mot de passe.",
+      "unknown": "Une erreur inattendue s'est produite."
+    },
+    "abort": {
+      "already_configured": "Cette caméra est déjà configurée.",
+      "reconfigure_successful": "Identifiants de la caméra mis à jour.",
+      "unique_id_mismatch": "Les paramètres que vous avez entrés se connectent à une caméra différente de celle en cours de reconfiguration. Pour basculer vers une autre caméra, supprimez cette entrée et ajoutez-la à nouveau."
+    }
+  },
+  "entity": {
+    "switch": {
+      "blc_enabled": {
+        "name": "BLC"
+      },
+      "hlc_enabled": {
+        "name": "HLC"
+      },
+      "imageflip_enabled": {
+        "name": "Inversion d'image"
+      },
+      "lensdistortioncorrection_enabled": {
+        "name": "Correction de la distorsion de l'objectif"
+      },
+      "exposure_overexposesuppress_enabled": {
+        "name": "Lumière d'appoint intelligente"
+      }
+    },
+    "number": {
+      "wdr_wdrlevel": {
+        "name": "Niveau WDR"
+      },
+      "hlc_hlclevel": {
+        "name": "Niveau HLC"
+      },
+      "ircutfilter_nighttodayfilterlevel": {
+        "name": "Sensibilité Nuit-Jour"
+      },
+      "ircutfilter_nighttodayfiltertime": {
+        "name": "Délai Nuit-Jour"
+      },
+      "exposure_autoirislevel": {
+        "name": "Niveau d'iris auto"
+      },
+      "exposure_piris_irislevel": {
+        "name": "Niveau P-Iris"
+      },
+      "shutter_shutterlevel": {
+        "name": "Vitesse d'obturation"
+      },
+      "gain_gainlevel": {
+        "name": "Gain"
+      },
+      "color_brightnesslevel": {
+        "name": "Luminosité"
+      },
+      "color_contrastlevel": {
+        "name": "Contraste"
+      },
+      "color_saturationlevel": {
+        "name": "Saturation"
+      },
+      "sharpness_sharpnesslevel": {
+        "name": "Netteté"
+      },
+      "noisereduce_generalmode_generallevel": {
+        "name": "Niveau de réduction du bruit"
+      },
+      "noisereduce_advancedmode_framenoisereducelevel": {
+        "name": "Niveau de réduction du bruit spatial"
+      },
+      "noisereduce_advancedmode_interframenoisereducelevel": {
+        "name": "Niveau de réduction du bruit temporel"
+      },
+      "dehaze_dehazelevel": {
+        "name": "Niveau de désembuage"
+      },
+      "whitebalance_whitebalancered": {
+        "name": "Balance des blancs (Rouge)"
+      },
+      "whitebalance_whitebalanceblue": {
+        "name": "Balance des blancs (Bleu)"
+      },
+      "supplementlight_whitelightbrightness": {
+        "name": "Luminosité de la lumière"
+      },
+      "supplementlight_highirlightbrightness": {
+        "name": "Luminosité IR élevée"
+      },
+      "supplementlight_lowirlightbrightness": {
+        "name": "Luminosité IR faible"
+      },
+      "lensdistortioncorrection_accuratelevel": {
+        "name": "Niveau de correction"
+      }
+    },
+    "select": {
+      "wdr_mode": {
+        "name": "WDR",
+        "state": {
+          "close": "Désactivé",
+          "auto": "Auto",
+          "manual": "Manuel"
+        }
+      },
+      "blc_blcmode": {
+        "name": "Mode BLC",
+        "state": {
+          "CLOSE": "Désactivé",
+          "LEFTRIGHT": "Gauche-Droite",
+          "UPDOWN": "Haut-Bas",
+          "CENTER": "Centre",
+          "Region": "Région",
+          "AUTO": "Auto"
+        }
+      },
+      "ircutfilter_ircutfiltertype": {
+        "name": "Mode Jour/Nuit",
+        "state": {
+          "day": "Jour",
+          "night": "Nuit",
+          "auto": "Auto",
+          "schedule": "Planifié"
+        }
+      },
+      "exposure_exposuretype": {
+        "name": "Mode d'iris",
+        "state": {
+          "auto": "Auto",
+          "manual": "Manuel",
+          "pIris-General": "P-Iris"
+        }
+      },
+      "exposure_piris_piristype": {
+        "name": "Mode P-Iris",
+        "state": {
+          "auto": "Auto",
+          "manual": "Manuel"
+        }
+      },
+      "color_grayscale_grayscalemode": {
+        "name": "Espace colorimétrique",
+        "state": {
+          "auto": "Auto",
+          "color": "Couleur",
+          "black-white": "Noir et blanc"
+        }
+      },
+      "noisereduce_mode": {
+        "name": "Réduction du bruit",
+        "state": {
+          "close": "Désactivé",
+          "general": "Normal",
+          "advanced": "Avancé"
+        }
+      },
+      "dehaze_dehazemode": {
+        "name": "Désembuage",
+        "state": {
+          "close": "Désactivé",
+          "auto": "Auto",
+          "manual": "Manuel"
+        }
+      },
+      "whitebalance_whitebalancestyle": {
+        "name": "Balance des blancs",
+        "state": {
+          "auto1": "Auto 1",
+          "auto2": "Auto 2",
+          "manual": "Manuel",
+          "locked": "Verrouillé",
+          "daylightLamp": "Fluorescent",
+          "incandescentlight": "Incandescent",
+          "warmlight": "Lumière chaude",
+          "naturallight": "Lumière naturelle"
+        }
+      },
+      "imageflip_imageflipstyle": {
+        "name": "Sens de l'inversion",
+        "state": {
+          "CENTER": "Centre",
+          "UPDOWN": "Haut-Bas",
+          "LEFTRIGHT": "Gauche-Droite"
+        }
+      },
+      "powerlinefrequency_powerlinefrequencymode": {
+        "name": "Fréquence du réseau électrique",
+        "state": {
+          "50hz": "50 Hz",
+          "60hz": "60 Hz"
+        }
+      },
+      "supplementlight_supplementlightmode": {
+        "name": "Lumière d'appoint",
+        "state": {
+          "close": "Désactivé",
+          "colorVuWhiteLight": "Lumière blanche",
+          "irLight": "Infrarouge (IR)"
+        }
+      },
+      "supplementlight_mixedlightbrightnessregulatmode": {
+        "name": "Mode de luminosité de la lumière",
+        "state": {
+          "auto": "Auto",
+          "manual": "Manuel"
+        }
+      },
+      "scene_mode": {
+        "name": "Mode de scène",
+        "state": {
+          "outdoor": "Extérieur",
+          "indoor": "Intérieur"
+        }
+      },
+      "focusconfiguration_focusstyle": {
+        "name": "Mode de mise au point",
+        "state": {
+          "AUTO": "Auto",
+          "MANUAL": "Manuel",
+          "SEMIAUTOMATIC": "Semi-automatique"
+        }
+      },
+      "exposure_overexposesuppress_type": {
+        "name": "Mode de lumière d'appoint intelligente",
+        "state": {
+          "AUTO": "Auto",
+          "MANUAL": "Manuel"
+        }
+      }
+    }
+  }
+}
