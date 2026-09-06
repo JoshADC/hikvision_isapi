@@ -1,0 +1,255 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "連線至海康威視攝影機",
+        "description": "請輸入攝影機的 IP 位址與管理員憑證。將使用摘要式驗證 (Digest Authentication)。",
+        "data": {
+          "host": "主機",
+          "username": "使用者名稱",
+          "password": "密碼"
+        }
+      },
+      "reconfigure": {
+        "title": "重新設定海康威視攝影機",
+        "description": "更新攝影機的 IP 位址或憑證。新設定必須連線至與原先條目相同的實體攝影機。",
+        "data": {
+          "host": "主機",
+          "username": "使用者名稱",
+          "password": "密碼"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "無法連線至攝影機。請檢查 IP 位址並確認攝影機連線正常。",
+      "invalid_auth": "憑證無效。請檢查使用者名稱與密碼。",
+      "unknown": "發生未預期的錯誤。"
+    },
+    "abort": {
+      "already_configured": "此攝影機已完成設定。",
+      "reconfigure_successful": "攝影機憑證已更新。",
+      "unique_id_mismatch": "您輸入的設定所連線的是不同的攝影機，而非正在重新設定的攝影機。若要切換至其他攝影機，請刪除此條目並重新新增。"
+    }
+  },
+  "entity": {
+    "switch": {
+      "blc_enabled": {
+        "name": "背光補償 (BLC)"
+      },
+      "hlc_enabled": {
+        "name": "強光抑制 (HLC)"
+      },
+      "imageflip_enabled": {
+        "name": "影像翻轉"
+      },
+      "lensdistortioncorrection_enabled": {
+        "name": "鏡頭失真校正"
+      },
+      "exposure_overexposesuppress_enabled": {
+        "name": "智慧補光燈"
+      }
+    },
+    "number": {
+      "wdr_wdrlevel": {
+        "name": "WDR 等級"
+      },
+      "hlc_hlclevel": {
+        "name": "HLC 等級"
+      },
+      "ircutfilter_nighttodayfilterlevel": {
+        "name": "夜間轉白天靈敏度"
+      },
+      "ircutfilter_nighttodayfiltertime": {
+        "name": "夜間轉白天延遲"
+      },
+      "exposure_autoirislevel": {
+        "name": "自動光圈等級"
+      },
+      "exposure_piris_irislevel": {
+        "name": "P-Iris 等級"
+      },
+      "shutter_shutterlevel": {
+        "name": "快門速度"
+      },
+      "gain_gainlevel": {
+        "name": "增益"
+      },
+      "color_brightnesslevel": {
+        "name": "亮度"
+      },
+      "color_contrastlevel": {
+        "name": "對比度"
+      },
+      "color_saturationlevel": {
+        "name": "飽和度"
+      },
+      "sharpness_sharpnesslevel": {
+        "name": "銳利度"
+      },
+      "noisereduce_generalmode_generallevel": {
+        "name": "降噪等級"
+      },
+      "noisereduce_advancedmode_framenoisereducelevel": {
+        "name": "空間降噪等級"
+      },
+      "noisereduce_advancedmode_interframenoisereducelevel": {
+        "name": "時間降噪等級"
+      },
+      "dehaze_dehazelevel": {
+        "name": "除霧等級"
+      },
+      "whitebalance_whitebalancered": {
+        "name": "白平衡紅色"
+      },
+      "whitebalance_whitebalanceblue": {
+        "name": "白平衡藍色"
+      },
+      "supplementlight_whitelightbrightness": {
+        "name": "燈光亮度"
+      },
+      "supplementlight_highirlightbrightness": {
+        "name": "紅外線高亮度"
+      },
+      "supplementlight_lowirlightbrightness": {
+        "name": "紅外線低亮度"
+      },
+      "lensdistortioncorrection_accuratelevel": {
+        "name": "校正等級"
+      }
+    },
+    "select": {
+      "wdr_mode": {
+        "name": "WDR",
+        "state": {
+          "close": "關閉",
+          "auto": "自動",
+          "manual": "手動"
+        }
+      },
+      "blc_blcmode": {
+        "name": "BLC 模式",
+        "state": {
+          "CLOSE": "關閉",
+          "LEFTRIGHT": "左右",
+          "UPDOWN": "上下",
+          "CENTER": "中心",
+          "Region": "區域",
+          "AUTO": "自動"
+        }
+      },
+      "ircutfilter_ircutfiltertype": {
+        "name": "日夜模式",
+        "state": {
+          "day": "白天",
+          "night": "夜晚",
+          "auto": "自動",
+          "schedule": "排程"
+        }
+      },
+      "exposure_exposuretype": {
+        "name": "光圈模式",
+        "state": {
+          "auto": "自動",
+          "manual": "手動",
+          "pIris-General": "P-Iris"
+        }
+      },
+      "exposure_piris_piristype": {
+        "name": "P-Iris 模式",
+        "state": {
+          "auto": "自動",
+          "manual": "手動"
+        }
+      },
+      "color_grayscale_grayscalemode": {
+        "name": "色彩空間",
+        "state": {
+          "auto": "自動",
+          "color": "彩色",
+          "black-white": "黑白"
+        }
+      },
+      "noisereduce_mode": {
+        "name": "降噪",
+        "state": {
+          "close": "關閉",
+          "general": "一般",
+          "advanced": "進階"
+        }
+      },
+      "dehaze_dehazemode": {
+        "name": "除霧",
+        "state": {
+          "close": "關閉",
+          "auto": "自動",
+          "manual": "手動"
+        }
+      },
+      "whitebalance_whitebalancestyle": {
+        "name": "白平衡",
+        "state": {
+          "auto1": "自動 1",
+          "auto2": "自動 2",
+          "manual": "手動",
+          "locked": "鎖定",
+          "daylightLamp": "日光燈",
+          "incandescentlight": "白熾燈",
+          "warmlight": "暖光",
+          "naturallight": "自然光"
+        }
+      },
+      "imageflip_imageflipstyle": {
+        "name": "翻轉方向",
+        "state": {
+          "CENTER": "中心",
+          "UPDOWN": "上下",
+          "LEFTRIGHT": "左右"
+        }
+      },
+      "powerlinefrequency_powerlinefrequencymode": {
+        "name": "電源頻率",
+        "state": {
+          "50hz": "50 Hz",
+          "60hz": "60 Hz"
+        }
+      },
+      "supplementlight_supplementlightmode": {
+        "name": "輔助光",
+        "state": {
+          "close": "關閉",
+          "colorVuWhiteLight": "白光",
+          "irLight": "紅外線 (IR)"
+        }
+      },
+      "supplementlight_mixedlightbrightnessregulatmode": {
+        "name": "燈光亮度模式",
+        "state": {
+          "auto": "自動",
+          "manual": "手動"
+        }
+      },
+      "scene_mode": {
+        "name": "場景模式",
+        "state": {
+          "outdoor": "戶外",
+          "indoor": "室內"
+        }
+      },
+      "focusconfiguration_focusstyle": {
+        "name": "對焦模式",
+        "state": {
+          "AUTO": "自動",
+          "MANUAL": "手動",
+          "SEMIAUTOMATIC": "半自動"
+        }
+      },
+      "exposure_overexposesuppress_type": {
+        "name": "智慧補光燈模式",
+        "state": {
+          "AUTO": "自動",
+          "MANUAL": "手動"
+        }
+      }
+    }
+  }
+}
