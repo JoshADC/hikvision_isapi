@@ -24,9 +24,10 @@ class HikvisionISAPIEntity(CoordinatorEntity[HikvisionISAPICoordinator]):
         self._descriptor = descriptor
         device = coordinator.device_info
 
-        # Unique ID: MAC + ISAPI path
+        # Unique ID: MAC + ISAPI path (unchanged — do not alter existing unique_ids)
         self._attr_unique_id = f"{device.unique_id}_{descriptor.path}"
-        self._attr_name = descriptor.name
+        self._attr_translation_key = descriptor.translation_key
+        self._attr_name = None  # name comes from translations via translation_key
 
     @property
     def device_info(self) -> HADeviceInfo:

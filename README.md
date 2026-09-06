@@ -100,6 +100,38 @@ This is simpler than toggling multiple entities, and it matches how the camera a
 
 Should work with any Hikvision camera that supports the `/ISAPI/Image/channels/1` endpoint (most modern models). If your camera doesn't work, holler at me, I'll see what we can track down.
 
+## Languages
+
+The integration's entity names, dropdown options, and setup dialog are translatable. Available so far:
+
+- English (`en`) — default/fallback
+- French (`fr`)
+- Chinese, Simplified (`zh-CN`)
+- Chinese, Hong Kong (`zh-HK`)
+
+Home Assistant picks the file that matches your profile's language setting (**Settings → General → Language**, or your per-user profile language) automatically — nothing to configure in the integration itself. If your language isn't listed, it falls back to English.
+
+### Contributing a translation
+
+1. Copy `custom_components/hikvision_isapi/translations/en.json` to `<language_code>.json` in the same folder, using a [BCP 47](https://developers.home-assistant.io/docs/translations/) language tag (e.g., `de.json`, `es.json`, `pt-BR.json`).
+2. Translate the values on the right-hand side only — never change the keys on the left, or Home Assistant won't be able to match them up.
+3. Under `"entity" → "select" → <key> → "state"`, only the *values* need translating — the raw keys (`"close"`, `"auto"`, etc.) are the literal values the camera reports and must stay as-is.
+4. Open a PR. If you're not sure a translated string reads naturally, leave a note in the PR — happy to get a second opinion before merging.
+
+### "Translation coverage gaps" warning
+
+Different Hikvision camera models and firmware versions don't all report the same settings the same way — a setting that's a slider (`number`) on one model can be a dropdown (`select`) on another, and the same setting can even live at a differently-cased ISAPI path. When that happens, an entity or a select option can end up with no matching translation entry. That's harmless — it just falls back to showing a generic name or the camera's raw value instead of a translated one — but it's easy to miss.
+
+If you see a log entry like this after setting up the integration:
+
+```
+Translation coverage gaps for this camera (harmless — raw values are shown
+until these are added to strings.json / translations/en.json):
+- Exposure/PIris/Type  (translation_key: exposure_piris_type)  → no entry under entity.select.exposure_piris_type in strings.json; ...
+```
+
+it means your camera reported something under a path this integration hasn't seen before. Please open an issue (or a PR) with that log line and, if possible, the actual option values shown in Home Assistant's entity settings — that's exactly what's needed to add proper naming and translations for your camera model.
+
 ## Installation
 
 ### HACS (Recommended)

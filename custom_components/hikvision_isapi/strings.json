@@ -30,5 +30,234 @@
       "reconfigure_successful": "Camera credentials updated.",
       "unique_id_mismatch": "The settings you entered connect to a different camera than the one being reconfigured. To switch to a different camera, delete this entry and add it again."
     }
+  },
+  "entity": {
+    "switch": {
+      "blc_enabled": {
+        "name": "BLC"
+      },
+      "hlc_enabled": {
+        "name": "HLC"
+      },
+      "imageflip_enabled": {
+        "name": "Image Flip"
+      },
+      "lensdistortioncorrection_enabled": {
+        "name": "Lens Distortion Correction"
+      },
+      "exposure_overexposesuppress_enabled": {
+        "name": "Smart Supplement Light"
+      }
+    },
+    "number": {
+      "wdr_wdrlevel": {
+        "name": "WDR Level"
+      },
+      "hlc_hlclevel": {
+        "name": "HLC Level"
+      },
+      "ircutfilter_nighttodayfilterlevel": {
+        "name": "Night-to-Day Sensitivity"
+      },
+      "ircutfilter_nighttodayfiltertime": {
+        "name": "Night-to-Day Delay"
+      },
+      "exposure_autoirislevel": {
+        "name": "Auto Iris Level"
+      },
+      "exposure_piris_irislevel": {
+        "name": "P-Iris Level"
+      },
+      "shutter_shutterlevel": {
+        "name": "Shutter Speed"
+      },
+      "gain_gainlevel": {
+        "name": "Gain"
+      },
+      "color_brightnesslevel": {
+        "name": "Brightness"
+      },
+      "color_contrastlevel": {
+        "name": "Contrast"
+      },
+      "color_saturationlevel": {
+        "name": "Saturation"
+      },
+      "sharpness_sharpnesslevel": {
+        "name": "Sharpness"
+      },
+      "noisereduce_generalmode_generallevel": {
+        "name": "Noise Reduction Level"
+      },
+      "noisereduce_advancedmode_framenoisereducelevel": {
+        "name": "Spatial NR Level"
+      },
+      "noisereduce_advancedmode_interframenoisereducelevel": {
+        "name": "Temporal NR Level"
+      },
+      "dehaze_dehazelevel": {
+        "name": "Defog Level"
+      },
+      "whitebalance_whitebalancered": {
+        "name": "White Balance Red"
+      },
+      "whitebalance_whitebalanceblue": {
+        "name": "White Balance Blue"
+      },
+      "supplementlight_whitelightbrightness": {
+        "name": "Light Brightness"
+      },
+      "supplementlight_highirlightbrightness": {
+        "name": "IR High Brightness"
+      },
+      "supplementlight_lowirlightbrightness": {
+        "name": "IR Low Brightness"
+      },
+      "lensdistortioncorrection_accuratelevel": {
+        "name": "Correction Level"
+      }
+    },
+    "select": {
+      "wdr_mode": {
+        "name": "WDR",
+        "state": {
+          "close": "Off",
+          "open": "On",
+          "auto": "Auto"
+        }
+      },
+      "blc_blcmode": {
+        "name": "BLC Mode",
+        "state": {
+          "CLOSE": "Off",
+          "UP": "Up",
+          "DOWN": "Down",
+          "LEFT": "Left",
+          "RIGHT": "Right",
+          "CENTER": "Center",
+          "Region": "Region",
+          "AUTO": "Auto"
+        }
+      },
+      "ircutfilter_ircutfiltertype": {
+        "name": "Day/Night Mode",
+        "state": {
+          "day": "Day",
+          "night": "Night",
+          "auto": "Auto",
+          "schedule": "Schedule"
+        }
+      },
+      "exposure_exposuretype": {
+        "name": "Iris Mode",
+        "state": {
+          "auto": "Auto",
+          "manual": "Manual",
+          "pIris-General": "P-Iris"
+        }
+      },
+      "exposure_piris_piristype": {
+        "name": "P-Iris Mode",
+        "state": {
+          "auto": "Auto",
+          "manual": "Manual"
+        }
+      },
+      "color_grayscale_grayscalemode": {
+        "name": "Color Space",
+        "state": {
+          "auto": "Auto",
+          "color": "Color",
+          "black-white": "Black & White"
+        }
+      },
+      "noisereduce_mode": {
+        "name": "Noise Reduction",
+        "state": {
+          "close": "Off",
+          "general": "Normal",
+          "advanced": "Advanced"
+        }
+      },
+      "dehaze_dehazemode": {
+        "name": "Defog",
+        "state": {
+          "close": "Off",
+          "auto": "Auto",
+          "manual": "Manual"
+        }
+      },
+      "whitebalance_whitebalancestyle": {
+        "name": "White Balance",
+        "state": {
+          "auto1": "Auto 1",
+          "auto2": "Auto 2",
+          "manual": "Manual",
+          "locked": "Locked",
+          "daylightLamp": "Fluorescent",
+          "incandescentlight": "Incandescent",
+          "warmlight": "Warm Light",
+          "naturallight": "Natural Light"
+        }
+      },
+      "imageflip_imageflipstyle": {
+        "name": "Flip Direction",
+        "state": {
+          "CENTER": "Center",
+          "UPDOWN": "Up-Down",
+          "LEFTRIGHT": "Left-Right"
+        }
+      },
+      "powerlinefrequency_powerlinefrequencymode": {
+        "name": "Power Line Frequency",
+        "state": {
+          "50hz": "50 Hz",
+          "60hz": "60 Hz"
+        }
+      },
+      "supplementlight_supplementlightmode": {
+        "name": "Supplement Light",
+        "state": {
+          "close": "Off",
+          "colorVuWhiteLight": "White Light",
+          "irLight": "IR"
+        }
+      },
+      "supplementlight_mixedlightbrightnessregulatmode": {
+        "name": "Light Brightness Mode",
+        "state": {
+          "auto": "Auto",
+          "manual": "Manual"
+        }
+      },
+      "scene_mode": {
+        "name": "Scene Mode",
+        "state": {
+          "outdoor": "Outdoor",
+          "indoor": "Indoor"
+        }
+      },
+      "focusconfiguration_focusstyle": {
+        "name": "Focus Mode",
+        "state": {
+          "AUTO": "Auto",
+          "MANUAL": "Manual",
+          "SEMIAUTOMATIC": "Semi-automatic"
+        }
+      },
+      "shutter_shutterlevel": {
+        "name": "Shutter Speed"
+      },
+      "ircutfilter_nighttodayfilterlevel": {
+        "name": "Night-to-Day Sensitivity"
+      },
+      "exposure_overexposesuppress_type": {
+        "name": "Smart Supplement Light Mode",
+        "state": {
+          "AUTO": "Auto",
+          "MANUAL": "Manual"
+        }
+      }
+    }
   }
 }

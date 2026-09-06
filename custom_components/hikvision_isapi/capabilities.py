@@ -81,6 +81,7 @@ ENTITY_NAMES: dict[str, str] = {
     "Exposure/ExposureType": "Iris Mode",
     "Exposure/autoIrisLevel": "Auto Iris Level",
     "Exposure/OverexposeSuppress/enabled": "Smart Supplement Light",
+    "Exposure/OverexposeSuppress/Type": "Smart Supplement Light Mode",
     "Exposure/pIris/pIrisType": "P-Iris Mode",
     "Exposure/pIris/IrisLevel": "P-Iris Level",
     "Shutter/ShutterLevel": "Shutter Speed",
@@ -136,10 +137,10 @@ class EntityType(Enum):
 @dataclass
 class EntityDescriptor:
     path: str  # e.g., "Exposure/OverexposeSuppress/enabled"
-    name: str  # e.g., "Smart Supplement Light"
+    name: str  # Fallback name if translation key isn't used
+    translation_key: str  # Normalized key for Home Assistant translations
     entity_type: EntityType
     options: list[str] = field(default_factory=list)  # raw ISAPI values for selects
-    friendly_options: list[str] = field(default_factory=list)  # translated for UI
     min_value: float | None = None
     max_value: float | None = None
     current_value: str = ""
@@ -151,8 +152,8 @@ class EntityDescriptor:
     def __str__(self) -> str:
         if self.entity_type == EntityType.SELECT:
             opts = ", ".join(
-                f"{f} ({r})" if f != r else r
-                for r, f in zip(self.options, self.friendly_options)
+                f"{FRIENDLY_NAMES.get(o, o)} ({o})" if FRIENDLY_NAMES.get(o, o) != o else o
+                for o in self.options
             )
             return f"[select]  {self.name:<30} = {self.friendly_value:<15} opts: {opts}"
         elif self.entity_type == EntityType.NUMBER:
@@ -207,6 +208,7 @@ def _walk(
         opt = child.attrib.get("opt")
         min_val = child.attrib.get("min")
         max_val = child.attrib.get("max")
+        translation_key = path.lower().replace("/", "_")
 
         if opt is not None:
             options = [o.strip() for o in opt.split(",")]
@@ -216,17 +218,17 @@ def _walk(
                 entities.append(EntityDescriptor(
                     path=path,
                     name=ENTITY_NAMES.get(path, _path_to_name(path)),
+                    translation_key=translation_key,
                     entity_type=EntityType.SWITCH,
                     current_value=default_value,
                 ))
             elif len(options) > 1:
-                friendly = [FRIENDLY_NAMES.get(o, o) for o in options]
                 entities.append(EntityDescriptor(
                     path=path,
                     name=ENTITY_NAMES.get(path, _path_to_name(path)),
+                    translation_key=translation_key,
                     entity_type=EntityType.SELECT,
                     options=options,
-                    friendly_options=friendly,
                     current_value=default_value,
                 ))
             # Single-option selects (e.g., ExposureType="manual" on ColorVu) — still
@@ -236,9 +238,9 @@ def _walk(
                 entities.append(EntityDescriptor(
                     path=path,
                     name=ENTITY_NAMES.get(path, _path_to_name(path)),
+                    translation_key=translation_key,
                     entity_type=EntityType.SELECT,
                     options=options,
-                    friendly_options=[FRIENDLY_NAMES.get(options[0], options[0])],
                     current_value=default_value,
                 ))
         elif min_val is not None and max_val is not None:
@@ -246,6 +248,7 @@ def _walk(
             entities.append(EntityDescriptor(
                 path=path,
                 name=ENTITY_NAMES.get(path, _path_to_name(path)),
+                translation_key=translation_key,
                 entity_type=EntityType.NUMBER,
                 min_value=float(min_val),
                 max_value=float(max_val),

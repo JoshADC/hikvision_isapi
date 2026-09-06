@@ -1,0 +1,255 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "连接到海康威视摄像机",
+        "description": "输入摄像机的 IP 地址和管理员凭据。将使用摘要认证（Digest Authentication）。",
+        "data": {
+          "host": "主机",
+          "username": "用户名",
+          "password": "密码"
+        }
+      },
+      "reconfigure": {
+        "title": "重新配置海康威视摄像机",
+        "description": "更新摄像机的 IP 地址或凭据。新设置必须连接到与原始条目相同的物理摄像机。",
+        "data": {
+          "host": "主机",
+          "username": "用户名",
+          "password": "密码"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "连接摄像机失败。请检查 IP 地址并确保摄像机可达。",
+      "invalid_auth": "凭据无效。请检查用户名和密码。",
+      "unknown": "发生未知错误。"
+    },
+    "abort": {
+      "already_configured": "该摄像机已配置。",
+      "reconfigure_successful": "摄像机凭据已更新。",
+      "unique_id_mismatch": "您输入的设置连接到了与当前正在重新配置的摄像机不同的设备。若要切换到其他摄像机，请删除此条目并重新添加。"
+    }
+  },
+  "entity": {
+    "switch": {
+      "blc_enabled": {
+        "name": "背光补偿 (BLC)"
+      },
+      "hlc_enabled": {
+        "name": "强光抑制 (HLC)"
+      },
+      "imageflip_enabled": {
+        "name": "图像翻转"
+      },
+      "lensdistortioncorrection_enabled": {
+        "name": "镜头畸变矫正"
+      },
+      "exposure_overexposesuppress_enabled": {
+        "name": "智能补光"
+      }
+    },
+    "number": {
+      "wdr_wdrlevel": {
+        "name": "宽动态级别"
+      },
+      "hlc_hlclevel": {
+        "name": "强光抑制级别"
+      },
+      "ircutfilter_nighttodayfilterlevel": {
+        "name": "昼夜转换灵敏度"
+      },
+      "ircutfilter_nighttodayfiltertime": {
+        "name": "昼夜转换延迟"
+      },
+      "exposure_autoirislevel": {
+        "name": "自动光圈级别"
+      },
+      "exposure_piris_irislevel": {
+        "name": "P-Iris 光圈级别"
+      },
+      "shutter_shutterlevel": {
+        "name": "快门速度"
+      },
+      "gain_gainlevel": {
+        "name": "增益"
+      },
+      "color_brightnesslevel": {
+        "name": "亮度"
+      },
+      "color_contrastlevel": {
+        "name": "对比度"
+      },
+      "color_saturationlevel": {
+        "name": "饱和度"
+      },
+      "sharpness_sharpnesslevel": {
+        "name": "锐度"
+      },
+      "noisereduce_generalmode_generallevel": {
+        "name": "降噪级别"
+      },
+      "noisereduce_advancedmode_framenoisereducelevel": {
+        "name": "空间降噪级别"
+      },
+      "noisereduce_advancedmode_interframenoisereducelevel": {
+        "name": "时间降噪级别"
+      },
+      "dehaze_dehazelevel": {
+        "name": "透雾级别"
+      },
+      "whitebalance_whitebalancered": {
+        "name": "白平衡红色"
+      },
+      "whitebalance_whitebalanceblue": {
+        "name": "白平衡蓝色"
+      },
+      "supplementlight_whitelightbrightness": {
+        "name": "补光灯亮度"
+      },
+      "supplementlight_highirlightbrightness": {
+        "name": "红外高亮度"
+      },
+      "supplementlight_lowirlightbrightness": {
+        "name": "红外低亮度"
+      },
+      "lensdistortioncorrection_accuratelevel": {
+        "name": "矫正级别"
+      }
+    },
+    "select": {
+      "wdr_mode": {
+        "name": "宽动态 (WDR)",
+        "state": {
+          "close": "关闭",
+          "auto": "自动",
+          "manual": "手动"
+        }
+      },
+      "blc_blcmode": {
+        "name": "背光补偿模式",
+        "state": {
+          "CLOSE": "关闭",
+          "LEFTRIGHT": "左右",
+          "UPDOWN": "上下",
+          "CENTER": "中心",
+          "Region": "区域",
+          "AUTO": "自动"
+        }
+      },
+      "ircutfilter_ircutfiltertype": {
+        "name": "日夜模式",
+        "state": {
+          "day": "白天",
+          "night": "夜晚",
+          "auto": "自动",
+          "schedule": "定时"
+        }
+      },
+      "exposure_exposuretype": {
+        "name": "光圈模式",
+        "state": {
+          "auto": "自动",
+          "manual": "手动",
+          "pIris-General": "P-Iris"
+        }
+      },
+      "exposure_piris_piristype": {
+        "name": "P-Iris 模式",
+        "state": {
+          "auto": "自动",
+          "manual": "手动"
+        }
+      },
+      "color_grayscale_grayscalemode": {
+        "name": "色彩空间",
+        "state": {
+          "auto": "自动",
+          "color": "彩色",
+          "black-white": "黑白"
+        }
+      },
+      "noisereduce_mode": {
+        "name": "降噪",
+        "state": {
+          "close": "关闭",
+          "general": "常规",
+          "advanced": "高级"
+        }
+      },
+      "dehaze_dehazemode": {
+        "name": "透雾",
+        "state": {
+          "close": "关闭",
+          "auto": "自动",
+          "manual": "手动"
+        }
+      },
+      "whitebalance_whitebalancestyle": {
+        "name": "白平衡",
+        "state": {
+          "auto1": "自动 1",
+          "auto2": "自动 2",
+          "manual": "手动",
+          "locked": "锁定",
+          "daylightLamp": "日光灯",
+          "incandescentlight": "白炽灯",
+          "warmlight": "暖光",
+          "naturallight": "自然光"
+        }
+      },
+      "imageflip_imageflipstyle": {
+        "name": "翻转方向",
+        "state": {
+          "CENTER": "中心",
+          "UPDOWN": "上下",
+          "LEFTRIGHT": "左右"
+        }
+      },
+      "powerlinefrequency_powerlinefrequencymode": {
+        "name": "电源频率",
+        "state": {
+          "50hz": "50 Hz",
+          "60hz": "60 Hz"
+        }
+      },
+      "supplementlight_supplementlightmode": {
+        "name": "补光灯模式",
+        "state": {
+          "close": "关闭",
+          "colorVuWhiteLight": "白光",
+          "irLight": "红外"
+        }
+      },
+      "supplementlight_mixedlightbrightnessregulatmode": {
+        "name": "补光亮度模式",
+        "state": {
+          "auto": "自动",
+          "manual": "手动"
+        }
+      },
+      "scene_mode": {
+        "name": "场景模式",
+        "state": {
+          "outdoor": "室外",
+          "indoor": "室内"
+        }
+      },
+      "focusconfiguration_focusstyle": {
+        "name": "对焦模式",
+        "state": {
+          "AUTO": "自动",
+          "MANUAL": "手动",
+          "SEMIAUTOMATIC": "半自动"
+        }
+      },
+      "exposure_overexposesuppress_type": {
+        "name": "智能补光模式",
+        "state": {
+          "AUTO": "自动",
+          "MANUAL": "手动"
+        }
+      }
+    }
+  }
+}
