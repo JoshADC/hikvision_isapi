@@ -8,3 +8,9 @@ venv/
 dist/
 build/
 .DS_Store
+
+# Local dev scratch — standalone scripts, not part of the integration.
+# Anchored with / so the real custom_components/ modules stay tracked.
+/capabilities.py
+/isapi_client.py
+/test_discovery.py
