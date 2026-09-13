@@ -82,6 +82,7 @@ ENTITY_NAMES: dict[str, str] = {
     "Exposure/autoIrisLevel": "Auto Iris Level",
     "Exposure/OverexposeSuppress/enabled": "Smart Supplement Light",
     "Exposure/OverexposeSuppress/Type": "Smart Supplement Light Mode",
+    "Exposure/OverexposeSuppress/DistanceLevel": "Smart Supplement Light Distance",
     "Exposure/pIris/pIrisType": "P-Iris Mode",
     "Exposure/pIris/IrisLevel": "P-Iris Level",
     "Shutter/ShutterLevel": "Shutter Speed",

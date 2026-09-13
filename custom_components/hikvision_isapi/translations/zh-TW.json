@@ -115,6 +115,9 @@
       },
       "lensdistortioncorrection_accuratelevel": {
         "name": "校正等級"
+      },
+      "exposure_overexposesuppress_distancelevel": {
+        "name": "智慧型補光距離"
       }
     },
     "select": {

@@ -15,6 +15,8 @@ from .capabilities import EntityDescriptor, EntityType, parse_capabilities, _bui
 from .const import DEFAULT_SCAN_INTERVAL, DOMAIN
 from .isapi_client import DeviceInfo, ISAPIClient
 
+import re
+
 _LOGGER = logging.getLogger(__name__)
 
 _PLATFORM_KEY = {
@@ -23,8 +25,15 @@ _PLATFORM_KEY = {
     EntityType.SELECT: "select",
 }
 
+# Options that are purely digits or simple fractions (e.g. "4", "1/1000")
+# read the same in every language - no "state" translation entry is needed
+# for them, and flagging them would just be noise on every startup.
+_NUMERIC_OPTION = re.compile(r"^\d+(/\d+)?$")
 
-def _check_translation_coverage(entities: List[EntityDescriptor]) -> None:
+
+async def _check_translation_coverage(
+    hass: HomeAssistant, entities: List[EntityDescriptor]
+) -> None:
     """Log any entity/select-option missing from strings.json, in one message.
 
     Different camera models can report the same logical setting under a
@@ -37,7 +46,11 @@ def _check_translation_coverage(entities: List[EntityDescriptor]) -> None:
     """
     strings_path = Path(__file__).parent / "strings.json"
     try:
-        strings = json.loads(strings_path.read_text())
+        # read_text() is blocking disk I/O - must not run directly on the
+        # event loop (this is what util.loop's blocking-call detector was
+        # correctly flagging). Offload it to the executor instead.
+        raw = await hass.async_add_executor_job(strings_path.read_text)
+        strings = json.loads(raw)
     except (OSError, json.JSONDecodeError) as err:
         _LOGGER.debug("Translation coverage check skipped: %s", err)
         return
@@ -59,7 +72,10 @@ def _check_translation_coverage(entities: List[EntityDescriptor]) -> None:
 
         if e.entity_type == EntityType.SELECT:
             state = entry.get("state", {})
-            untranslated = [o for o in e.options if o not in state]
+            untranslated = [
+                o for o in e.options
+                if o not in state and not _NUMERIC_OPTION.match(o)
+            ]
             if untranslated:
                 issues.append(
                     f"- {e.path}  (translation_key: {e.translation_key})  "
@@ -106,7 +122,7 @@ class HikvisionISAPICoordinator(DataUpdateCoordinator):
                 caps_xml = await self.client.get_capabilities()
                 values_xml = await self.client.get_current_values()
                 self.entity_descriptors = parse_capabilities(caps_xml, values_xml)
-                _check_translation_coverage(self.entity_descriptors)
+                await _check_translation_coverage(self.hass, self.entity_descriptors)
                 self._capabilities_fetched = True
                 return {e.path: e.current_value for e in self.entity_descriptors}
 

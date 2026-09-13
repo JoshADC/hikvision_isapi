@@ -27,7 +27,13 @@ class HikvisionISAPIEntity(CoordinatorEntity[HikvisionISAPICoordinator]):
         # Unique ID: MAC + ISAPI path (unchanged — do not alter existing unique_ids)
         self._attr_unique_id = f"{device.unique_id}_{descriptor.path}"
         self._attr_translation_key = descriptor.translation_key
-        self._attr_name = None  # name comes from translations via translation_key
+        # Deliberately NOT setting self._attr_name here (not even to None).
+        # HA's Entity.name property returns _attr_name immediately if the
+        # attribute exists at all, regardless of its value — so assigning
+        # None skips the translation_key lookup entirely instead of
+        # triggering it. Leaving the attribute unset is what lets `name`
+        # fall through to UNDEFINED, which is what makes HA look up the
+        # translation via translation_key + has_entity_name.
 
     @property
     def device_info(self) -> HADeviceInfo:
