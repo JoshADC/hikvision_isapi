@@ -115,6 +115,9 @@
       },
       "lensdistortioncorrection_accuratelevel": {
         "name": "Niveau de correction"
+      },
+      "exposure_overexposesuppress_distancelevel": {
+        "name": "Distance de l'éclairage d'appoint intelligent"
       }
     },
     "select": {

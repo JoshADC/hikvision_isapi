@@ -115,6 +115,9 @@
       },
       "lensdistortioncorrection_accuratelevel": {
         "name": "Correction Level"
+      },
+      "exposure_overexposesuppress_distancelevel": {
+        "name": "Smart Supplement Light Distance"
       }
     },
     "select": {
