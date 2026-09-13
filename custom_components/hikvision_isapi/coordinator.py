@@ -15,6 +15,8 @@ from .capabilities import EntityDescriptor, EntityType, parse_capabilities, _bui
 from .const import DEFAULT_SCAN_INTERVAL, DOMAIN
 from .isapi_client import DeviceInfo, ISAPIClient
 
+import re
+
 _LOGGER = logging.getLogger(__name__)
 
 _PLATFORM_KEY = {
@@ -22,6 +24,11 @@ _PLATFORM_KEY = {
     EntityType.NUMBER: "number",
     EntityType.SELECT: "select",
 }
+
+# Options that are purely digits or simple fractions (e.g. "4", "1/1000")
+# read the same in every language - no "state" translation entry is needed
+# for them, and flagging them would just be noise on every startup.
+_NUMERIC_OPTION = re.compile(r"^\d+(/\d+)?$")
 
 
 async def _check_translation_coverage(
@@ -65,7 +72,10 @@ async def _check_translation_coverage(
 
         if e.entity_type == EntityType.SELECT:
             state = entry.get("state", {})
-            untranslated = [o for o in e.options if o not in state]
+            untranslated = [
+                o for o in e.options
+                if o not in state and not _NUMERIC_OPTION.match(o)
+            ]
             if untranslated:
                 issues.append(
                     f"- {e.path}  (translation_key: {e.translation_key})  "
