@@ -238,6 +238,14 @@ automation:
           value: 30
 ```
 
+### Lux-Driven Exposure (Community)
+
+[@baylanger](https://github.com/baylanger) built a full Home Assistant package that drives exposure continuously from an ambient light sensor, rather than switching between fixed profiles at sunset/sunrise. It computes gain and shutter speed from live lux readings on a log curve, and handles the day/night flip with a separate threshold in each direction so passing clouds don't cause flapping. It also sequences its writes around the mutually-exclusive feature rules described above.
+
+**[hikvision_isapi-lux-automation](https://github.com/baylanger/hikvision_isapi-lux-automation)**
+
+Built against a DS-2CD2385G1-I with an Aeotec multisensor mounted indoors, pointed out a window facing the same direction as the camera. The lux sensor is swappable without editing YAML; the camera-side entity IDs need editing for your own camera.
+
 ## Technical Details
 
 - **Protocol:** ISAPI over HTTP with digest authentication (automatic fallback to basic auth for old cameras like the DS-2CD8464F-EI that don't support digest)

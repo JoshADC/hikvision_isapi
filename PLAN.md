@@ -23,7 +23,7 @@ This integration fills the gap: full image tuning from HA, with prerequisite han
 | Panoramic | DS-2CD2T87G2P-LSU/SL | 192.168.8.155 | V5.7.20 (251125) | Panoramic ColorVu bullet, wide-angle, fixed iris | Mounted, live |
 | Turret 3MP | DS-2CD2387G2-LU | 192.168.8.127 | V5.7.19 (241207) | ColorVu 3MP turret, fixed iris, white supplement light | Mounted, live, extensively tuned |
 
-- **Credentials (all):** admin / F13897921$ (except .127: admin / 13897921$)
+- **Credentials:** stored locally, not in this repo.
 
 ## ISAPI Findings (2026-02-09)
 
