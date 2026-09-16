@@ -114,6 +114,8 @@ Home Assistant picks the file that matches your profile's language setting (**Se
 ### Contributing a translation
 
 1. Copy `custom_components/hikvision_isapi/translations/en.json` to `<language_code>.json` in the same folder, using a [BCP 47](https://developers.home-assistant.io/docs/translations/) language tag (e.g., `de.json`, `es.json`, `pt-BR.json`).
+
+   **Important:** the filename must exactly match a tag from Home Assistant's own list of supported languages — the same list used to populate the language dropdown in a user's profile settings. A tag can be valid BCP 47 and still not work here if HA itself doesn't recognize it (e.g. use `zh-Hans`/`zh-Hant`, not `zh-CN`/`zh-HK` — Home Assistant only ships the former). If in doubt, check what your own Settings → your profile → Language dropdown actually offers.
 2. Translate the values on the right-hand side only — never change the keys on the left, or Home Assistant won't be able to match them up.
 3. Under `"entity" → "select" → <key> → "state"`, only the *values* need translating — the raw keys (`"close"`, `"auto"`, etc.) are the literal values the camera reports and must stay as-is.
 4. Open a PR. If you're not sure a translated string reads naturally, leave a note in the PR — happy to get a second opinion before merging.

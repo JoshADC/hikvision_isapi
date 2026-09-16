@@ -47,6 +47,15 @@
       },
       "exposure_overexposesuppress_enabled": {
         "name": "Smart Supplement Light"
+      },
+      "eis_enabled": {
+        "name": "Image Stabilization"
+      },
+      "dss_enabled": {
+        "name": "Digital Slow Shutter"
+      },
+      "imagefreeze_enabled": {
+        "name": "Image Freeze"
       }
     },
     "number": {
@@ -118,6 +127,27 @@
       },
       "exposure_overexposesuppress_distancelevel": {
         "name": "Smart Supplement Light Distance"
+      },
+      "iris_maxirislevellimit": {
+        "name": "Max Iris Level"
+      },
+      "iris_minirislevellimit": {
+        "name": "Min Iris Level"
+      },
+      "gain_gainlimit": {
+        "name": "Gain Limit"
+      },
+      "supplementlight_whitelightbrightnesslimit": {
+        "name": "White Light Brightness Limit"
+      },
+      "supplementlight_irlightbrightnesslimit": {
+        "name": "IR Light Brightness Limit"
+      },
+      "supplementlight_irlightbrightness": {
+        "name": "IR Light Brightness"
+      },
+      "smartnoisereduce_level": {
+        "name": "Smart Noise Reduction Level"
       }
     },
     "select": {
@@ -156,7 +186,9 @@
         "state": {
           "auto": "Auto",
           "manual": "Manual",
-          "pIris-General": "P-Iris"
+          "pIris-General": "P-Iris",
+          "IrisFirst": "Iris Priority",
+          "ShutterFirst": "Shutter Priority"
         }
       },
       "exposure_piris_piristype": {
@@ -187,7 +219,8 @@
         "state": {
           "close": "Off",
           "auto": "Auto",
-          "manual": "Manual"
+          "manual": "Manual",
+          "open": "On"
         }
       },
       "whitebalance_whitebalancestyle": {
@@ -200,7 +233,12 @@
           "daylightLamp": "Fluorescent",
           "incandescentlight": "Incandescent",
           "warmlight": "Warm Light",
-          "naturallight": "Natural Light"
+          "naturallight": "Natural Light",
+          "outdoor": "Outdoor",
+          "indoor": "Indoor",
+          "sodiumlight": "Sodium Lamp",
+          "autotrace": "Auto Trace",
+          "auto": "Auto"
         }
       },
       "imageflip_imageflipstyle": {
@@ -260,6 +298,30 @@
           "AUTO": "Auto",
           "MANUAL": "Manual"
         }
+      },
+      "ircutfilter_schedule_scheduletype": {
+        "name": "Day/Night Schedule Type"
+      },
+      "iris_irislevel": {
+        "name": "Iris Level"
+      },
+      "shutter_maxshutterlevellimit": {
+        "name": "Max Shutter Speed"
+      },
+      "shutter_minshutterlevellimit": {
+        "name": "Min Shutter Speed"
+      },
+      "focusconfiguration_focusdistancemode": {
+        "name": "Focus Distance Mode"
+      },
+      "focusconfiguration_focuslimited": {
+        "name": "Focus Limit Mode"
+      },
+      "dss_dsslevel": {
+        "name": "Digital Slow Shutter Level"
+      },
+      "supplementlight_mode": {
+        "name": "Supplement Light Mode"
       }
     }
   }

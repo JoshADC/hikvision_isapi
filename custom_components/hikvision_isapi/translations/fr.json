@@ -47,6 +47,15 @@
       },
       "exposure_overexposesuppress_enabled": {
         "name": "Lumière d'appoint intelligente"
+      },
+      "eis_enabled": {
+        "name": "Stabilisation d'image"
+      },
+      "dss_enabled": {
+        "name": "Obturateur lent numérique"
+      },
+      "imagefreeze_enabled": {
+        "name": "Gel d'image"
       }
     },
     "number": {
@@ -118,6 +127,27 @@
       },
       "exposure_overexposesuppress_distancelevel": {
         "name": "Distance de l'éclairage d'appoint intelligent"
+      },
+      "iris_maxirislevellimit": {
+        "name": "Niveau d'iris max"
+      },
+      "iris_minirislevellimit": {
+        "name": "Niveau d'iris min"
+      },
+      "gain_gainlimit": {
+        "name": "Limite de gain"
+      },
+      "supplementlight_whitelightbrightnesslimit": {
+        "name": "Limite de luminosité (lumière blanche)"
+      },
+      "supplementlight_irlightbrightnesslimit": {
+        "name": "Limite de luminosité IR"
+      },
+      "supplementlight_irlightbrightness": {
+        "name": "Luminosité IR"
+      },
+      "smartnoisereduce_level": {
+        "name": "Niveau de réduction du bruit intelligente"
       }
     },
     "select": {
@@ -125,16 +155,18 @@
         "name": "WDR",
         "state": {
           "close": "Désactivé",
-          "auto": "Auto",
-          "manual": "Manuel"
+          "open": "Activé",
+          "auto": "Auto"
         }
       },
       "blc_blcmode": {
         "name": "Mode BLC",
         "state": {
           "CLOSE": "Désactivé",
-          "LEFTRIGHT": "Gauche-Droite",
-          "UPDOWN": "Haut-Bas",
+          "UP": "Haut",
+          "DOWN": "Bas",
+          "LEFT": "Gauche",
+          "RIGHT": "Droite",
           "CENTER": "Centre",
           "Region": "Région",
           "AUTO": "Auto"
@@ -154,7 +186,9 @@
         "state": {
           "auto": "Auto",
           "manual": "Manuel",
-          "pIris-General": "P-Iris"
+          "pIris-General": "P-Iris",
+          "IrisFirst": "Priorité iris",
+          "ShutterFirst": "Priorité obturateur"
         }
       },
       "exposure_piris_piristype": {
@@ -185,7 +219,8 @@
         "state": {
           "close": "Désactivé",
           "auto": "Auto",
-          "manual": "Manuel"
+          "manual": "Manuel",
+          "open": "Activé"
         }
       },
       "whitebalance_whitebalancestyle": {
@@ -198,7 +233,12 @@
           "daylightLamp": "Fluorescent",
           "incandescentlight": "Incandescent",
           "warmlight": "Lumière chaude",
-          "naturallight": "Lumière naturelle"
+          "naturallight": "Lumière naturelle",
+          "outdoor": "Extérieur",
+          "indoor": "Intérieur",
+          "sodiumlight": "Lampe au sodium",
+          "autotrace": "Poursuite automatique",
+          "auto": "Auto"
         }
       },
       "imageflip_imageflipstyle": {
@@ -252,6 +292,36 @@
           "AUTO": "Auto",
           "MANUAL": "Manuel"
         }
+      },
+      "shutter_shutterlevel": {
+        "name": "Vitesse d'obturation"
+      },
+      "ircutfilter_nighttodayfilterlevel": {
+        "name": "Sensibilité Nuit-Jour"
+      },
+      "ircutfilter_schedule_scheduletype": {
+        "name": "Type de planification Jour/Nuit"
+      },
+      "iris_irislevel": {
+        "name": "Niveau d'iris"
+      },
+      "shutter_maxshutterlevellimit": {
+        "name": "Vitesse d'obturation max"
+      },
+      "shutter_minshutterlevellimit": {
+        "name": "Vitesse d'obturation min"
+      },
+      "focusconfiguration_focusdistancemode": {
+        "name": "Mode de distance de mise au point"
+      },
+      "focusconfiguration_focuslimited": {
+        "name": "Mode de limite de mise au point"
+      },
+      "dss_dsslevel": {
+        "name": "Niveau d'obturateur lent numérique"
+      },
+      "supplementlight_mode": {
+        "name": "Mode de lumière d'appoint"
       }
     }
   }

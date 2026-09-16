@@ -47,6 +47,15 @@
       },
       "exposure_overexposesuppress_enabled": {
         "name": "智能补光"
+      },
+      "eis_enabled": {
+        "name": "电子防抖 (EIS)"
+      },
+      "dss_enabled": {
+        "name": "数字慢快门 (DSS)"
+      },
+      "imagefreeze_enabled": {
+        "name": "图像冻结"
       }
     },
     "number": {
@@ -118,6 +127,27 @@
       },
       "exposure_overexposesuppress_distancelevel": {
         "name": "智能补光距离"
+      },
+      "iris_maxirislevellimit": {
+        "name": "最大光圈级别"
+      },
+      "iris_minirislevellimit": {
+        "name": "最小光圈级别"
+      },
+      "gain_gainlimit": {
+        "name": "增益限制"
+      },
+      "supplementlight_whitelightbrightnesslimit": {
+        "name": "白光亮度限制"
+      },
+      "supplementlight_irlightbrightnesslimit": {
+        "name": "红外亮度限制"
+      },
+      "supplementlight_irlightbrightness": {
+        "name": "红外亮度"
+      },
+      "smartnoisereduce_level": {
+        "name": "智能降噪级别"
       }
     },
     "select": {
@@ -125,16 +155,18 @@
         "name": "宽动态 (WDR)",
         "state": {
           "close": "关闭",
-          "auto": "自动",
-          "manual": "手动"
+          "open": "开启",
+          "auto": "自动"
         }
       },
       "blc_blcmode": {
         "name": "背光补偿模式",
         "state": {
           "CLOSE": "关闭",
-          "LEFTRIGHT": "左右",
-          "UPDOWN": "上下",
+          "UP": "上",
+          "DOWN": "下",
+          "LEFT": "左",
+          "RIGHT": "右",
           "CENTER": "中心",
           "Region": "区域",
           "AUTO": "自动"
@@ -154,7 +186,9 @@
         "state": {
           "auto": "自动",
           "manual": "手动",
-          "pIris-General": "P-Iris"
+          "pIris-General": "P-Iris",
+          "IrisFirst": "光圈优先",
+          "ShutterFirst": "快门优先"
         }
       },
       "exposure_piris_piristype": {
@@ -185,7 +219,8 @@
         "state": {
           "close": "关闭",
           "auto": "自动",
-          "manual": "手动"
+          "manual": "手动",
+          "open": "开启"
         }
       },
       "whitebalance_whitebalancestyle": {
@@ -198,7 +233,12 @@
           "daylightLamp": "日光灯",
           "incandescentlight": "白炽灯",
           "warmlight": "暖光",
-          "naturallight": "自然光"
+          "naturallight": "自然光",
+          "outdoor": "室外",
+          "indoor": "室内",
+          "sodiumlight": "钠灯",
+          "autotrace": "自动追踪",
+          "auto": "自动"
         }
       },
       "imageflip_imageflipstyle": {
@@ -252,6 +292,36 @@
           "AUTO": "自动",
           "MANUAL": "手动"
         }
+      },
+      "shutter_shutterlevel": {
+        "name": "快门速度"
+      },
+      "ircutfilter_nighttodayfilterlevel": {
+        "name": "昼夜转换灵敏度"
+      },
+      "ircutfilter_schedule_scheduletype": {
+        "name": "日夜定时类型"
+      },
+      "iris_irislevel": {
+        "name": "光圈级别"
+      },
+      "shutter_maxshutterlevellimit": {
+        "name": "最大快门速度"
+      },
+      "shutter_minshutterlevellimit": {
+        "name": "最小快门速度"
+      },
+      "focusconfiguration_focusdistancemode": {
+        "name": "对焦距离模式"
+      },
+      "focusconfiguration_focuslimited": {
+        "name": "对焦限制模式"
+      },
+      "dss_dsslevel": {
+        "name": "数字慢快门级别"
+      },
+      "supplementlight_mode": {
+        "name": "补光模式"
       }
     }
   }
