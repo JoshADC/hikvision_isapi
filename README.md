@@ -106,9 +106,8 @@ The integration's entity names, dropdown options, and setup dialog are translata
 
 - English (`en`) — default/fallback
 - French (`fr`)
-- Chinese, Simplified (`zh-CN`)
-- Chinese, Hong Kong (`zh-HK`)
-- Chinese, Taiwan Kong (`zh-TW`)
+- Chinese, Simplified (`zh-Hans`)
+- Chinese, Traditional (`zh-Hant`)
 
 Home Assistant picks the file that matches your profile's language setting (**Settings → General → Language**, or your per-user profile language) automatically — nothing to configure in the integration itself. If your language isn't listed, it falls back to English.
 
