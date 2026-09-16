@@ -124,7 +124,7 @@ Home Assistant picks the file that matches your profile's language setting (**Se
 
 Different Hikvision camera models and firmware versions don't all report the same settings the same way — a setting that's a slider (`number`) on one model can be a dropdown (`select`) on another, and the same setting can even live at a differently-cased ISAPI path. When that happens, an entity or a select option can end up with no matching translation entry. That's harmless — it just falls back to showing a generic name or the camera's raw value instead of a translated one — but it's easy to miss.
 
-If you see a log entry like this after setting up the integration:
+If you see a log entry in `System -> Logs` like this after setting up the integration:
 
 ```
 Translation coverage gaps for this camera (harmless — raw values are shown
