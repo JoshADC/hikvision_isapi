@@ -122,7 +122,9 @@ Home Assistant picks the file that matches your profile's language setting (**Se
 
 ### "Translation coverage gaps" warning
 
-Different Hikvision camera models and firmware versions don't all report the same settings the same way — a setting that's a slider (`number`) on one model can be a dropdown (`select`) on another, and the same setting can even live at a differently-cased ISAPI path. When that happens, an entity or a select option can end up with no matching translation entry. That's harmless — it just falls back to showing a generic name or the camera's raw value instead of a translated one — but it's easy to miss.
+Different Hikvision camera models and firmware versions don't all report the same settings the same way — a setting that's a slider (`number`) on one model can be a dropdown (`select`) on another, and the same setting can even live at a differently-cased ISAPI path. When that happens, an entity or a select option can end up with no matching translation entry.
+
+That's harmless: an entity with no translation still gets a readable, generated English name (e.g. "Focus Distance Mode") instead of no name at all, and an untranslated select option just shows its raw camera value. But it's still a **gap worth reporting** — a generated or raw fallback isn't a substitute for a proper name or translation, and it's easy to overlook one quietly showing up in English inside an otherwise fully-translated dashboard.
 
 If you see a log entry in `System -> Logs` like this after setting up the integration:
 
@@ -132,7 +134,7 @@ until these are added to strings.json / translations/en.json):
 - Exposure/PIris/Type  (translation_key: exposure_piris_type)  → no entry under entity.select.exposure_piris_type in strings.json; ...
 ```
 
-it means your camera reported something under a path this integration hasn't seen before. Please open an issue (or a PR) with that log line and, if possible, the actual option values shown in Home Assistant's entity settings — that's exactly what's needed to add proper naming and translations for your camera model.
+it means your camera reported something under a path this integration hasn't seen before — even if the entity itself looks fine in the UI. Please open an issue (or a PR) with that log line and, if possible, the actual option values shown in Home Assistant's entity settings — that's exactly what's needed to add proper naming and translations for your camera model.
 
 ## Installation
 

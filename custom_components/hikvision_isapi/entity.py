@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from homeassistant.helpers.device_registry import DeviceInfo as HADeviceInfo
+from homeassistant.helpers.entity import EntityDescription
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .capabilities import EntityDescriptor
@@ -27,13 +28,23 @@ class HikvisionISAPIEntity(CoordinatorEntity[HikvisionISAPICoordinator]):
         # Unique ID: MAC + ISAPI path (unchanged — do not alter existing unique_ids)
         self._attr_unique_id = f"{device.unique_id}_{descriptor.path}"
         self._attr_translation_key = descriptor.translation_key
-        # Deliberately NOT setting self._attr_name here (not even to None).
-        # HA's Entity.name property returns _attr_name immediately if the
-        # attribute exists at all, regardless of its value — so assigning
-        # None skips the translation_key lookup entirely instead of
-        # triggering it. Leaving the attribute unset is what lets `name`
-        # fall through to UNDEFINED, which is what makes HA look up the
-        # translation via translation_key + has_entity_name.
+        # Deliberately NOT setting self._attr_name (not even to None): HA's
+        # Entity.name property returns _attr_name immediately if the
+        # attribute exists at all, which would skip the translation_key
+        # lookup below entirely - even the entity_description fallback
+        # further down would never be reached.
+        #
+        # entity_description.name is HA's built-in fallback: when
+        # translation_key has no matching entry in any loaded strings.json
+        # (an untested camera model reporting a path we don't recognize),
+        # HA falls back to this instead of showing no name at all.
+        # descriptor.name (ENTITY_NAMES lookup, or a generated name as a
+        # last resort) is exactly that fallback - only used when no
+        # translation is found; a real translation always takes priority.
+        self.entity_description = EntityDescription(
+            key=descriptor.translation_key,
+            name=descriptor.name,
+        )
 
     @property
     def device_info(self) -> HADeviceInfo:
