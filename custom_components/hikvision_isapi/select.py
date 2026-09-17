@@ -5,7 +5,7 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from homeassistant.components.select import SelectEntity
+from homeassistant.components.select import SelectEntity, SelectEntityDescription
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -36,6 +36,8 @@ async def async_setup_entry(
 
 class HikvisionISAPISelect(HikvisionISAPIEntity, SelectEntity):
     """A select entity for Hikvision ISAPI dropdown settings."""
+
+    _entity_description_class = SelectEntityDescription
 
     def __init__(self, coordinator, descriptor):
         super().__init__(coordinator, descriptor)

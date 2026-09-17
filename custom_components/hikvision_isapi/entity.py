@@ -16,6 +16,16 @@ class HikvisionISAPIEntity(CoordinatorEntity[HikvisionISAPICoordinator]):
 
     _attr_has_entity_name = True
 
+    # Each platform module's own entity class must override this with its
+    # matching *EntityDescription subclass (e.g. NumberEntityDescription).
+    # HA's NumberEntity/SwitchEntity/SelectEntity property implementations
+    # assume entity_description, when set, is their own subclass - reading
+    # a field like native_unit_of_measurement straight off it without
+    # checking. A bare EntityDescription doesn't have those fields and
+    # raises AttributeError the moment such a property is read (which HA
+    # does for every entity as soon as it's added).
+    _entity_description_class: type[EntityDescription] = EntityDescription
+
     def __init__(
         self,
         coordinator: HikvisionISAPICoordinator,
@@ -41,7 +51,7 @@ class HikvisionISAPIEntity(CoordinatorEntity[HikvisionISAPICoordinator]):
         # descriptor.name (ENTITY_NAMES lookup, or a generated name as a
         # last resort) is exactly that fallback - only used when no
         # translation is found; a real translation always takes priority.
-        self.entity_description = EntityDescription(
+        self.entity_description = self._entity_description_class(
             key=descriptor.translation_key,
             name=descriptor.name,
         )

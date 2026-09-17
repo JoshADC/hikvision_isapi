@@ -5,7 +5,11 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from homeassistant.components.number import NumberEntity, NumberMode
+from homeassistant.components.number import (
+    NumberEntity,
+    NumberEntityDescription,
+    NumberMode,
+)
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -36,6 +40,7 @@ async def async_setup_entry(
 class HikvisionISAPINumber(HikvisionISAPIEntity, NumberEntity):
     """A number entity for Hikvision ISAPI numeric settings."""
 
+    _entity_description_class = NumberEntityDescription
     _attr_mode = NumberMode.SLIDER
 
     def __init__(self, coordinator, descriptor):
