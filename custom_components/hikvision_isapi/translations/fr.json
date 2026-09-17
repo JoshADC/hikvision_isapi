@@ -56,6 +56,12 @@
       },
       "imagefreeze_enabled": {
         "name": "Gel d'image"
+      },
+      "lensinitialization_enabled": {
+        "name": "Initialisation de l'objectif"
+      },
+      "proportionalpan_enabled": {
+        "name": "Panoramique proportionnel"
       }
     },
     "number": {
@@ -148,6 +154,9 @@
       },
       "smartnoisereduce_level": {
         "name": "Niveau de réduction du bruit intelligente"
+      },
+      "irlight_brightnesslimit": {
+        "name": "Limite de luminosité infrarouge"
       }
     },
     "select": {
@@ -300,7 +309,11 @@
         "name": "Sensibilité Nuit-Jour"
       },
       "ircutfilter_schedule_scheduletype": {
-        "name": "Type de planification Jour/Nuit"
+        "name": "Type de planification Jour/Nuit",
+        "state": {
+          "day": "Jour",
+          "night": "Nuit"
+        }
       },
       "iris_irislevel": {
         "name": "Niveau d'iris"
@@ -312,16 +325,38 @@
         "name": "Vitesse d'obturation min"
       },
       "focusconfiguration_focusdistancemode": {
-        "name": "Mode de distance de mise au point"
+        "name": "Mode de distance de mise au point",
+        "state": {
+          "compatible": "Compatible"
+        }
       },
       "focusconfiguration_focuslimited": {
         "name": "Mode de limite de mise au point"
       },
       "dss_dsslevel": {
-        "name": "Niveau d'obturateur lent numérique"
+        "name": "Niveau d'obturateur lent numérique",
+        "state": {
+          "*1.25": "×1.25",
+          "*1.5": "×1.5",
+          "*2": "×2",
+          "*3": "×3",
+          "*4": "×4",
+          "*6": "×6",
+          "*8": "×8",
+          "auto": "Auto"
+        }
       },
       "supplementlight_mode": {
-        "name": "Mode de lumière d'appoint"
+        "name": "Mode de lumière d'appoint",
+        "state": {
+          "auto": "Auto"
+        }
+      },
+      "zoomlimit_zoomlimitratio": {
+        "name": "Ratio de limite de zoom"
+      },
+      "irlight_mode": {
+        "name": "Mode infrarouge"
       }
     }
   }

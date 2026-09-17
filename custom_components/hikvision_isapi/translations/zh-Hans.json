@@ -56,6 +56,12 @@
       },
       "imagefreeze_enabled": {
         "name": "图像冻结"
+      },
+      "lensinitialization_enabled": {
+        "name": "镜头初始化"
+      },
+      "proportionalpan_enabled": {
+        "name": "比例云台"
       }
     },
     "number": {
@@ -148,6 +154,9 @@
       },
       "smartnoisereduce_level": {
         "name": "智能降噪级别"
+      },
+      "irlight_brightnesslimit": {
+        "name": "红外亮度限制"
       }
     },
     "select": {
@@ -300,7 +309,11 @@
         "name": "昼夜转换灵敏度"
       },
       "ircutfilter_schedule_scheduletype": {
-        "name": "日夜定时类型"
+        "name": "日夜定时类型",
+        "state": {
+          "day": "白天",
+          "night": "夜晚"
+        }
       },
       "iris_irislevel": {
         "name": "光圈级别"
@@ -312,16 +325,38 @@
         "name": "最小快门速度"
       },
       "focusconfiguration_focusdistancemode": {
-        "name": "对焦距离模式"
+        "name": "对焦距离模式",
+        "state": {
+          "compatible": "兼容"
+        }
       },
       "focusconfiguration_focuslimited": {
         "name": "对焦限制模式"
       },
       "dss_dsslevel": {
-        "name": "数字慢快门级别"
+        "name": "数字慢快门级别",
+        "state": {
+          "*1.25": "×1.25",
+          "*1.5": "×1.5",
+          "*2": "×2",
+          "*3": "×3",
+          "*4": "×4",
+          "*6": "×6",
+          "*8": "×8",
+          "auto": "自动"
+        }
       },
       "supplementlight_mode": {
-        "name": "补光模式"
+        "name": "补光模式",
+        "state": {
+          "auto": "自动"
+        }
+      },
+      "zoomlimit_zoomlimitratio": {
+        "name": "变焦限制比例"
+      },
+      "irlight_mode": {
+        "name": "红外模式"
       }
     }
   }

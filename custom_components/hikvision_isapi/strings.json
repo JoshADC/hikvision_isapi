@@ -56,6 +56,12 @@
       },
       "imagefreeze_enabled": {
         "name": "Image Freeze"
+      },
+      "lensinitialization_enabled": {
+        "name": "Lens Initialization"
+      },
+      "proportionalpan_enabled": {
+        "name": "Proportional Pan"
       }
     },
     "number": {
@@ -148,6 +154,9 @@
       },
       "smartnoisereduce_level": {
         "name": "Smart Noise Reduction Level"
+      },
+      "irlight_brightnesslimit": {
+        "name": "IR Light Brightness Limit"
       }
     },
     "select": {
@@ -300,7 +309,11 @@
         }
       },
       "ircutfilter_schedule_scheduletype": {
-        "name": "Day/Night Schedule Type"
+        "name": "Day/Night Schedule Type",
+        "state": {
+          "day": "Day",
+          "night": "Night"
+        }
       },
       "iris_irislevel": {
         "name": "Iris Level"
@@ -312,16 +325,38 @@
         "name": "Min Shutter Speed"
       },
       "focusconfiguration_focusdistancemode": {
-        "name": "Focus Distance Mode"
+        "name": "Focus Distance Mode",
+        "state": {
+          "compatible": "Compatible"
+        }
       },
       "focusconfiguration_focuslimited": {
         "name": "Focus Limit Mode"
       },
       "dss_dsslevel": {
-        "name": "Digital Slow Shutter Level"
+        "name": "Digital Slow Shutter Level",
+        "state": {
+          "*1.25": "\u00d71.25",
+          "*1.5": "\u00d71.5",
+          "*2": "\u00d72",
+          "*3": "\u00d73",
+          "*4": "\u00d74",
+          "*6": "\u00d76",
+          "*8": "\u00d78",
+          "auto": "Auto"
+        }
       },
       "supplementlight_mode": {
-        "name": "Supplement Light Mode"
+        "name": "Supplement Light Mode",
+        "state": {
+          "auto": "Auto"
+        }
+      },
+      "zoomlimit_zoomlimitratio": {
+        "name": "Zoom Limit Ratio"
+      },
+      "irlight_mode": {
+        "name": "IR Light Mode"
       }
     }
   }
