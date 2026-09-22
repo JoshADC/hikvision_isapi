@@ -62,6 +62,9 @@
       },
       "proportionalpan_enabled": {
         "name": "比例云台"
+      },
+      "enableimagelossdetection": {
+        "name": "视频丢失检测"
       }
     },
     "number": {
@@ -157,6 +160,18 @@
       },
       "irlight_brightnesslimit": {
         "name": "红外亮度限制"
+      },
+      "exposure_overexposesuppress_hightlightdistancelevel": {
+        "name": "智能补光距离（高亮区域）"
+      },
+      "exposure_overexposesuppress_lowlightdistancelevel": {
+        "name": "智能补光距离（低亮区域）"
+      },
+      "supplementlight_eventintelligencemodecfg_whitelightbrightness": {
+        "name": "白光亮度（事件智能）"
+      },
+      "supplementlight_eventintelligencemodecfg_irlightbrightness": {
+        "name": "红外亮度（事件智能）"
       }
     },
     "select": {
@@ -187,7 +202,8 @@
           "day": "白天",
           "night": "夜晚",
           "auto": "自动",
-          "schedule": "定时"
+          "schedule": "定时",
+          "eventTrigger": "事件触发"
         }
       },
       "exposure_exposuretype": {
@@ -212,7 +228,9 @@
         "state": {
           "auto": "自动",
           "color": "彩色",
-          "black-white": "黑白"
+          "black-white": "黑白",
+          "outdoor": "室外",
+          "indoor": "室内"
         }
       },
       "noisereduce_mode": {
@@ -270,7 +288,8 @@
         "state": {
           "close": "关闭",
           "colorVuWhiteLight": "白光",
-          "irLight": "红外"
+          "irLight": "红外",
+          "eventIntelligence": "事件智能"
         }
       },
       "supplementlight_mixedlightbrightnessregulatmode": {
@@ -356,7 +375,19 @@
         "name": "变焦限制比例"
       },
       "irlight_mode": {
-        "name": "红外模式"
+        "name": "红外模式",
+        "state": {
+          "auto": "自动"
+        }
+      },
+      "blc_enabled": {
+        "name": "背光补偿 (BLC)"
+      },
+      "capturemode_mode": {
+        "name": "抓拍模式"
+      },
+      "supplementlight_eventintelligencemodecfg_brightnessregulatmode": {
+        "name": "亮度模式（事件智能）"
       }
     }
   }

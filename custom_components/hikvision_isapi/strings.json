@@ -62,6 +62,9 @@
       },
       "proportionalpan_enabled": {
         "name": "Proportional Pan"
+      },
+      "enableimagelossdetection": {
+        "name": "Image Loss Detection"
       }
     },
     "number": {
@@ -157,6 +160,18 @@
       },
       "irlight_brightnesslimit": {
         "name": "IR Light Brightness Limit"
+      },
+      "exposure_overexposesuppress_hightlightdistancelevel": {
+        "name": "Smart Supplement Light High-Light Distance"
+      },
+      "exposure_overexposesuppress_lowlightdistancelevel": {
+        "name": "Smart Supplement Light Low-Light Distance"
+      },
+      "supplementlight_eventintelligencemodecfg_whitelightbrightness": {
+        "name": "Event Intelligence White Light Brightness"
+      },
+      "supplementlight_eventintelligencemodecfg_irlightbrightness": {
+        "name": "Event Intelligence IR Light Brightness"
       }
     },
     "select": {
@@ -187,7 +202,8 @@
           "day": "Day",
           "night": "Night",
           "auto": "Auto",
-          "schedule": "Schedule"
+          "schedule": "Schedule",
+          "eventTrigger": "Event Trigger"
         }
       },
       "exposure_exposuretype": {
@@ -212,7 +228,9 @@
         "state": {
           "auto": "Auto",
           "color": "Color",
-          "black-white": "Black & White"
+          "black-white": "Black & White",
+          "outdoor": "Outdoor",
+          "indoor": "Indoor"
         }
       },
       "noisereduce_mode": {
@@ -270,7 +288,8 @@
         "state": {
           "close": "Off",
           "colorVuWhiteLight": "White Light",
-          "irLight": "IR"
+          "irLight": "IR",
+          "eventIntelligence": "Event Intelligence"
         }
       },
       "supplementlight_mixedlightbrightnessregulatmode": {
@@ -356,7 +375,19 @@
         "name": "Zoom Limit Ratio"
       },
       "irlight_mode": {
-        "name": "IR Light Mode"
+        "name": "IR Light Mode",
+        "state": {
+          "auto": "Auto"
+        }
+      },
+      "blc_enabled": {
+        "name": "BLC"
+      },
+      "capturemode_mode": {
+        "name": "Capture Mode"
+      },
+      "supplementlight_eventintelligencemodecfg_brightnessregulatmode": {
+        "name": "Event Intelligence Brightness Mode"
       }
     }
   }

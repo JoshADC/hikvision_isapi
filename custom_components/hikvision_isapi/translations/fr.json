@@ -62,6 +62,9 @@
       },
       "proportionalpan_enabled": {
         "name": "Panoramique proportionnel"
+      },
+      "enableimagelossdetection": {
+        "name": "Détection de perte d'image"
       }
     },
     "number": {
@@ -157,6 +160,18 @@
       },
       "irlight_brightnesslimit": {
         "name": "Limite de luminosité infrarouge"
+      },
+      "exposure_overexposesuppress_hightlightdistancelevel": {
+        "name": "Distance de l'éclairage d'appoint intelligent (zone claire)"
+      },
+      "exposure_overexposesuppress_lowlightdistancelevel": {
+        "name": "Distance de l'éclairage d'appoint intelligent (zone sombre)"
+      },
+      "supplementlight_eventintelligencemodecfg_whitelightbrightness": {
+        "name": "Luminosité lumière blanche (intelligence événementielle)"
+      },
+      "supplementlight_eventintelligencemodecfg_irlightbrightness": {
+        "name": "Luminosité infrarouge (intelligence événementielle)"
       }
     },
     "select": {
@@ -187,7 +202,8 @@
           "day": "Jour",
           "night": "Nuit",
           "auto": "Auto",
-          "schedule": "Planifié"
+          "schedule": "Planifié",
+          "eventTrigger": "Déclenchement par événement"
         }
       },
       "exposure_exposuretype": {
@@ -212,7 +228,9 @@
         "state": {
           "auto": "Auto",
           "color": "Couleur",
-          "black-white": "Noir et blanc"
+          "black-white": "Noir et blanc",
+          "outdoor": "Extérieur",
+          "indoor": "Intérieur"
         }
       },
       "noisereduce_mode": {
@@ -270,7 +288,8 @@
         "state": {
           "close": "Désactivé",
           "colorVuWhiteLight": "Lumière blanche",
-          "irLight": "Infrarouge (IR)"
+          "irLight": "Infrarouge (IR)",
+          "eventIntelligence": "Intelligence événementielle"
         }
       },
       "supplementlight_mixedlightbrightnessregulatmode": {
@@ -356,7 +375,19 @@
         "name": "Ratio de limite de zoom"
       },
       "irlight_mode": {
-        "name": "Mode infrarouge"
+        "name": "Mode infrarouge",
+        "state": {
+          "auto": "Auto"
+        }
+      },
+      "blc_enabled": {
+        "name": "BLC"
+      },
+      "capturemode_mode": {
+        "name": "Mode de capture"
+      },
+      "supplementlight_eventintelligencemodecfg_brightnessregulatmode": {
+        "name": "Mode de luminosité (intelligence événementielle)"
       }
     }
   }
