@@ -110,6 +110,10 @@ Should work with any Hikvision camera that supports the `/ISAPI/Image/channels/1
 4. Click **Install**
 5. Restart Home Assistant
 
+### Beta: multi-language support (v1.4.0b1)
+
+A beta with French, Simplified Chinese, and Traditional Chinese translations is available as a [pre-release](https://github.com/JoshADC/hikvision_isapi/releases/tag/v1.4.0b1). It's opt-in only: in HACS, open the integration → ⋮ → **Redownload** → turn on **Show beta versions** → pick `v1.4.0b1`. Note the breaking change in the release notes — dropdowns now report the camera's raw values (e.g. `close` instead of `Off`), so automations that set or compare dropdown values need updating. Feedback goes in [#10](https://github.com/JoshADC/hikvision_isapi/pull/10) or [#6](https://github.com/JoshADC/hikvision_isapi/issues/6).
+
 ### Manual
 
 Copy the `custom_components/hikvision_isapi` folder to your Home Assistant `config/custom_components/` directory and restart.
