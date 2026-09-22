@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers import issue_registry as ir
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .capabilities import EntityDescriptor, EntityType, parse_capabilities, _build_value_map, _strip_ns
@@ -31,10 +32,15 @@ _PLATFORM_KEY = {
 _NUMERIC_OPTION = re.compile(r"^\d+(/\d+)?$")
 
 
+_GITHUB_ISSUES_URL = "https://github.com/JoshADC/hikvision_isapi/issues"
+
+
 async def _check_translation_coverage(
-    hass: HomeAssistant, entities: List[EntityDescriptor]
+    hass: HomeAssistant, device_info: DeviceInfo, entities: List[EntityDescriptor]
 ) -> None:
-    """Log any entity/select-option missing from strings.json, in one message.
+    """Log any entity/select-option missing from strings.json, in one message,
+    and raise a Home Assistant Repairs issue so the gap is visible in the UI
+    rather than only in the log.
 
     Different camera models can report the same logical setting under a
     different ISAPI path (a different translation_key), or expose select
@@ -44,6 +50,7 @@ async def _check_translation_coverage(
     check surfaces every gap at once, the first time a given camera's
     capabilities are parsed, so it can be filled in.
     """
+    issue_id = f"translation_gaps_{device_info.unique_id}"
     strings_path = Path(__file__).parent / "strings.json"
     try:
         # read_text() is blocking disk I/O - must not run directly on the
@@ -83,12 +90,35 @@ async def _check_translation_coverage(
                 )
 
     if issues:
+        summary = "\n".join(issues)
         _LOGGER.warning(
-            "Translation coverage gaps for this camera (harmless — raw "
-            "values are shown until these are added to strings.json / "
-            "translations/en.json):\n%s",
-            "\n".join(issues),
+            "Translation coverage gaps for %s (firmware %s): harmless - "
+            "raw values are shown until these are added to strings.json / "
+            "translations/en.json\n%s",
+            device_info.model,
+            device_info.firmware_version,
+            summary,
         )
+        ir.async_create_issue(
+            hass,
+            DOMAIN,
+            issue_id,
+            is_fixable=False,
+            severity=ir.IssueSeverity.WARNING,
+            translation_key="translation_gaps",
+            translation_placeholders={
+                "count": str(len(issues)),
+                "model": device_info.model,
+                "gaps": summary,
+                "github_url": _GITHUB_ISSUES_URL,
+            },
+            learn_more_url=_GITHUB_ISSUES_URL,
+        )
+    else:
+        # No gaps found (or the last-known gaps have since been fixed) -
+        # clear any previously-raised issue for this camera. Safe to call
+        # even if none exists.
+        ir.async_delete_issue(hass, DOMAIN, issue_id)
 
 
 class HikvisionISAPICoordinator(DataUpdateCoordinator):
@@ -122,7 +152,9 @@ class HikvisionISAPICoordinator(DataUpdateCoordinator):
                 caps_xml = await self.client.get_capabilities()
                 values_xml = await self.client.get_current_values()
                 self.entity_descriptors = parse_capabilities(caps_xml, values_xml)
-                await _check_translation_coverage(self.hass, self.entity_descriptors)
+                await _check_translation_coverage(
+                    self.hass, self.device_info, self.entity_descriptors
+                )
                 self._capabilities_fetched = True
                 return {e.path: e.current_value for e in self.entity_descriptors}
 

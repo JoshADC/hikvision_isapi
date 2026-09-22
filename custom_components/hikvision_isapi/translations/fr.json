@@ -390,5 +390,11 @@
         "name": "Mode de luminosité (intelligence événementielle)"
       }
     }
+  },
+  "issues": {
+    "translation_gaps": {
+      "title": "Traductions manquantes pour {count} paramètre(s) sur le modèle de caméra {model}",
+      "description": "Modèle de caméra : {model} (firmware {firmware})\n\nVotre caméra a signalé des paramètres pour lesquels cette intégration n'a pas encore de traductions. Ils fonctionnent normalement \u2014 ils affichent simplement un nom générique ou leur valeur brute de la caméra en attendant que ce soit corrigé.\n\n```\n{gaps}\n```\n\nVeuillez [ouvrir un ticket]({github_url}) avec cette liste afin que des noms et traductions appropriés puissent être ajoutés pour votre modèle de caméra."
+    }
   }
 }
