@@ -110,6 +110,7 @@ async def _check_translation_coverage(
                 "count": str(len(issues)),
                 "model": device_info.model,
                 "gaps": summary,
+                "firmware": device_info.firmware_version,
                 "github_url": _GITHUB_ISSUES_URL,
             },
             learn_more_url=_GITHUB_ISSUES_URL,
