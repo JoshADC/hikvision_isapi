@@ -381,13 +381,25 @@
         }
       },
       "blc_enabled": {
-        "name": "BLC"
+        "name": "BLC",
+        "state": {
+          "ture": "On",
+          "false": "Off"
+        }
       },
       "capturemode_mode": {
-        "name": "Capture Mode"
+        "name": "Capture Mode",
+        "state": {
+          "close": "Off",
+          "1920*1080@30fps": "1920×1080 @ 30fps"
+        }
       },
       "supplementlight_eventintelligencemodecfg_brightnessregulatmode": {
-        "name": "Event Intelligence Brightness Mode"
+        "name": "Event Intelligence Brightness Mode",
+        "state": {
+          "auto": "Auto",
+          "manual": "Manual"
+        }
       }
     }
   },

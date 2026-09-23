@@ -381,13 +381,25 @@
         }
       },
       "blc_enabled": {
-        "name": "BLC"
+        "name": "BLC",
+        "state": {
+          "ture": "Activé",
+          "false": "Désactivé"
+        }
       },
       "capturemode_mode": {
-        "name": "Mode de capture"
+        "name": "Mode de capture",
+        "state": {
+          "close": "Désactivé",
+          "1920*1080@30fps": "1920×1080 @ 30ips"
+        }
       },
       "supplementlight_eventintelligencemodecfg_brightnessregulatmode": {
-        "name": "Mode de luminosité (intelligence événementielle)"
+        "name": "Mode de luminosité (intelligence événementielle)",
+        "state": {
+          "auto": "Auto",
+          "manual": "Manuel"
+        }
       }
     }
   },

@@ -381,13 +381,25 @@
         }
       },
       "blc_enabled": {
-        "name": "背光補償 (BLC)"
+        "name": "背光補償 (BLC)",
+        "state": {
+          "ture": "開啟",
+          "false": "關閉"
+        }
       },
       "capturemode_mode": {
-        "name": "擷取模式"
+        "name": "擷取模式",
+        "state": {
+          "close": "關閉",
+          "1920*1080@30fps": "1920×1080 @ 30fps"
+        }
       },
       "supplementlight_eventintelligencemodecfg_brightnessregulatmode": {
-        "name": "亮度模式（事件智能）"
+        "name": "亮度模式（事件智能）",
+        "state": {
+          "auto": "自動",
+          "manual": "手動"
+        }
       }
     }
   },
