@@ -19,29 +19,105 @@ This integration lets you automate exposure profiles, brigthness, contrast, etc.
 
 ## What It Exposes
 
-Entities are **auto-discovered** from each camera's capabilities XML. Different camera models get different entities based on what they actually support. Common entities include:
+Entities are **auto-discovered** from each camera's capabilities XML. Different camera models get different entities based on what they actually support — fixed dome cameras and PTZ cameras in particular can expose quite different sets. Common entities include:
+
+**Exposure & Iris**
+
+| Entity | Type | Example |
+|--------|------|---------|
+| Iris Mode | Select | Auto, Manual, P-Iris, Iris Priority, Shutter Priority |
+| P-Iris Mode | Select | Auto, Manual |
+| P-Iris Level | Slider | 0–100 |
+| Auto Iris Level | Slider | 0–100 |
+| Iris Level | Select | *(varies by model — PTZ)* |
+| Max/Min Iris Level | Slider | 0–100 (PTZ) |
+| Shutter Speed | Select | 1/3 – 1/100000 (varies by model) |
+| Max/Min Shutter Speed | Select | *(PTZ)* |
+| Gain | Slider | 0–100 |
+| Gain Limit | Slider | 0–100 (PTZ) |
+
+**Backlight, Highlight & Wide Dynamic Range**
 
 | Entity | Type | Example |
 |--------|------|---------|
 | WDR | Select | Off, On, Auto |
 | WDR Level | Slider | 0–100 |
-| BLC Mode | Select | Off, Up, Down, Left, Right, Center, Auto |
+| BLC | Switch or Select | On/Off, or Off/Up/Down/Left/Right/Center/Region/Auto (varies by model) |
+| BLC Mode | Select | Off, Up, Down, Left, Right, Center, Region, Auto |
 | HLC | Switch | On/Off |
 | HLC Level | Slider | 0–100 |
-| Day/Night Mode | Select | Day, Night, Auto, Schedule |
-| Shutter Speed | Select | 1/3 – 1/100000 (varies by model) |
-| Gain | Slider | 0–100 |
+
+**Day/Night & IR**
+
+| Entity | Type | Example |
+|--------|------|---------|
+| Day/Night Mode | Select | Day, Night, Auto, Schedule, Event Trigger |
+| Day/Night Schedule Type | Select | Day, Night |
+| Night-to-Day Sensitivity | Slider or Select | 0–7 (varies by model) |
+| Night-to-Day Delay | Slider | 0–100 |
+| IR Light Mode | Select | Auto *(more options vary by model)* |
+| IR Light Brightness / Limit | Slider | 0–100 |
+
+**Supplement Light**
+
+| Entity | Type | Example |
+|--------|------|---------|
+| Supplement Light | Select | Off, White Light, IR (per model) |
+| Supplement Light Mode | Select | Auto, Event Intelligence |
+| Smart Supplement Light | Switch | On/Off |
+| Smart Supplement Light Mode | Select | Auto, Manual |
+| Smart Supplement Light Distance | Slider | 0–100 |
+| Smart Supplement Light High/Low-Light Distance | Slider | 0–100 (PTZ) |
+| Light Brightness / White Light Brightness / IR Brightness (and limits) | Slider | 0–100 |
+| Event Intelligence Brightness Mode | Select | Auto, Manual |
+| Event Intelligence White/IR Light Brightness | Slider | 0–100 (PTZ) |
+
+**Image Quality**
+
+| Entity | Type | Example |
+|--------|------|---------|
 | Brightness | Slider | 0–100 |
 | Contrast | Slider | 0–100 |
 | Saturation | Slider | 0–100 |
 | Sharpness | Slider | 0–100 |
+| Color Space | Select | Auto, Color, Black & White |
+| White Balance | Select | Auto 1, Auto 2, Manual, Locked, Sodium Lamp, Auto Trace, etc. |
+| White Balance Red/Blue | Slider | 0–100 |
 | Noise Reduction | Select | Off, Normal, Advanced |
-| Defog | Select | Off, Auto, On |
-| White Balance | Select | Auto 1, Auto 2, Manual, Locked, etc. |
-| Supplement Light | Select | On, Off (white light or IR, per model) |
-| Light Brightness | Slider | 0–100 |
+| Spatial / Temporal NR Level | Slider | 0–100 |
+| Smart Noise Reduction Level | Slider | 0–100 (PTZ) |
+| Defog | Select | Off, Auto, Manual, On |
+| Defog Level | Slider | 0–100 |
+| Lens Distortion Correction | Switch | On/Off |
+| Correction Level | Slider | 0–100 |
 | Image Flip | Switch | On/Off |
+| Flip Direction | Select | Center, Up-Down, Left-Right |
+
+**Focus & PTZ-Specific**
+
+| Entity | Type | Example |
+|--------|------|---------|
+| Focus Mode | Select | Auto, Manual, Semi-automatic |
+| Focus Distance Mode | Select | Compatible *(more options vary by model)* |
+| Focus Limit Mode | Select | *(varies by model)* |
+| Zoom Limit Ratio | Select | *(varies by model)* |
+| Image Stabilization (EIS) | Switch | On/Off |
+| Digital Slow Shutter (DSS) | Switch | On/Off |
+| Digital Slow Shutter Level | Select | ×1.25, ×1.5, ×2, ×3, ×4, ×6, ×8, Auto |
+| Image Freeze | Switch | On/Off |
+| Proportional Pan | Switch | On/Off |
+| Lens Initialization | Switch | On/Off |
+
+**Other**
+
+| Entity | Type | Example |
+|--------|------|---------|
+| Scene Mode | Select | Outdoor, Indoor |
 | Power Line Frequency | Select | 50 Hz, 60 Hz |
+| Capture Mode | Select | Off, 1920×1080@30fps *(varies by model)* |
+| Image Loss Detection | Switch | On/Off |
+
+Several rows say "(varies by model)", see section "Translation coverage gaps warning"
 
 Additional entities appear on specific models: P-Iris controls (motorized zoom cameras), focus mode, scene mode, lens distortion correction (panoramic cameras), IR high/low brightness, and more.
 
@@ -123,6 +199,8 @@ Home Assistant picks the file that matches your profile's language setting (**Se
 ### "Translation coverage gaps" warning
 
 Different Hikvision camera models and firmware versions don't all report the same settings the same way — a setting that's a slider (`number`) on one model can be a dropdown (`select`) on another, and the same setting can even live at a differently-cased ISAPI path. When that happens, an entity or a select option can end up with no matching translation entry.
+
+`Zoom Limit Ratio`, `Focus Limit Mode` and `Capture Mode` : We only got a name but never the real option values from a coverage log.
 
 That's harmless: an entity with no translation still gets a readable, generated English name (e.g. "Focus Distance Mode") instead of no name at all, and an untranslated select option just shows its raw camera value. But it's still a **gap worth reporting** — a generated or raw fallback isn't a substitute for a proper name or translation, and it's easy to overlook one quietly showing up in English inside an otherwise fully-translated dashboard.
 
