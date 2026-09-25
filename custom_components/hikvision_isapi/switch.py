@@ -5,7 +5,7 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from homeassistant.components.switch import SwitchEntity
+from homeassistant.components.switch import SwitchEntity, SwitchEntityDescription
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -36,6 +36,8 @@ async def async_setup_entry(
 
 class HikvisionISAPISwitch(HikvisionISAPIEntity, SwitchEntity):
     """A switch entity for Hikvision ISAPI boolean settings."""
+
+    _entity_description_class = SwitchEntityDescription
 
     @property
     def is_on(self) -> bool:

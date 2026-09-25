@@ -19,29 +19,105 @@ This integration lets you automate exposure profiles, brigthness, contrast, etc.
 
 ## What It Exposes
 
-Entities are **auto-discovered** from each camera's capabilities XML. Different camera models get different entities based on what they actually support. Common entities include:
+Entities are **auto-discovered** from each camera's capabilities XML. Different camera models get different entities based on what they actually support — fixed dome cameras and PTZ cameras in particular can expose quite different sets. Common entities include:
+
+**Exposure & Iris**
+
+| Entity | Type | Example |
+|--------|------|---------|
+| Iris Mode | Select | Auto, Manual, P-Iris, Iris Priority, Shutter Priority |
+| P-Iris Mode | Select | Auto, Manual |
+| P-Iris Level | Slider | 0–100 |
+| Auto Iris Level | Slider | 0–100 |
+| Iris Level | Select | *(varies by model — PTZ)* |
+| Max/Min Iris Level | Slider | 0–100 (PTZ) |
+| Shutter Speed | Select | 1/3 – 1/100000 (varies by model) |
+| Max/Min Shutter Speed | Select | *(PTZ)* |
+| Gain | Slider | 0–100 |
+| Gain Limit | Slider | 0–100 (PTZ) |
+
+**Backlight, Highlight & Wide Dynamic Range**
 
 | Entity | Type | Example |
 |--------|------|---------|
 | WDR | Select | Off, On, Auto |
 | WDR Level | Slider | 0–100 |
-| BLC Mode | Select | Off, Up, Down, Left, Right, Center, Auto |
+| BLC | Switch or Select | On/Off, or Off/Up/Down/Left/Right/Center/Region/Auto (varies by model) |
+| BLC Mode | Select | Off, Up, Down, Left, Right, Center, Region, Auto |
 | HLC | Switch | On/Off |
 | HLC Level | Slider | 0–100 |
-| Day/Night Mode | Select | Day, Night, Auto, Schedule |
-| Shutter Speed | Select | 1/3 – 1/100000 (varies by model) |
-| Gain | Slider | 0–100 |
+
+**Day/Night & IR**
+
+| Entity | Type | Example |
+|--------|------|---------|
+| Day/Night Mode | Select | Day, Night, Auto, Schedule, Event Trigger |
+| Day/Night Schedule Type | Select | Day, Night |
+| Night-to-Day Sensitivity | Slider or Select | 0–7 (varies by model) |
+| Night-to-Day Delay | Slider | 0–100 |
+| IR Light Mode | Select | Auto *(more options vary by model)* |
+| IR Light Brightness / Limit | Slider | 0–100 |
+
+**Supplement Light**
+
+| Entity | Type | Example |
+|--------|------|---------|
+| Supplement Light | Select | Off, White Light, IR (per model) |
+| Supplement Light Mode | Select | Auto, Event Intelligence |
+| Smart Supplement Light | Switch | On/Off |
+| Smart Supplement Light Mode | Select | Auto, Manual |
+| Smart Supplement Light Distance | Slider | 0–100 |
+| Smart Supplement Light High/Low-Light Distance | Slider | 0–100 (PTZ) |
+| Light Brightness / White Light Brightness / IR Brightness (and limits) | Slider | 0–100 |
+| Event Intelligence Brightness Mode | Select | Auto, Manual |
+| Event Intelligence White/IR Light Brightness | Slider | 0–100 (PTZ) |
+
+**Image Quality**
+
+| Entity | Type | Example |
+|--------|------|---------|
 | Brightness | Slider | 0–100 |
 | Contrast | Slider | 0–100 |
 | Saturation | Slider | 0–100 |
 | Sharpness | Slider | 0–100 |
+| Color Space | Select | Auto, Color, Black & White |
+| White Balance | Select | Auto 1, Auto 2, Manual, Locked, Sodium Lamp, Auto Trace, etc. |
+| White Balance Red/Blue | Slider | 0–100 |
 | Noise Reduction | Select | Off, Normal, Advanced |
-| Defog | Select | Off, Auto, On |
-| White Balance | Select | Auto 1, Auto 2, Manual, Locked, etc. |
-| Supplement Light | Select | On, Off (white light or IR, per model) |
-| Light Brightness | Slider | 0–100 |
+| Spatial / Temporal NR Level | Slider | 0–100 |
+| Smart Noise Reduction Level | Slider | 0–100 (PTZ) |
+| Defog | Select | Off, Auto, Manual, On |
+| Defog Level | Slider | 0–100 |
+| Lens Distortion Correction | Switch | On/Off |
+| Correction Level | Slider | 0–100 |
 | Image Flip | Switch | On/Off |
+| Flip Direction | Select | Center, Up-Down, Left-Right |
+
+**Focus & PTZ-Specific**
+
+| Entity | Type | Example |
+|--------|------|---------|
+| Focus Mode | Select | Auto, Manual, Semi-automatic |
+| Focus Distance Mode | Select | Compatible *(more options vary by model)* |
+| Focus Limit Mode | Select | *(varies by model)* |
+| Zoom Limit Ratio | Select | *(varies by model)* |
+| Image Stabilization (EIS) | Switch | On/Off |
+| Digital Slow Shutter (DSS) | Switch | On/Off |
+| Digital Slow Shutter Level | Select | ×1.25, ×1.5, ×2, ×3, ×4, ×6, ×8, Auto |
+| Image Freeze | Switch | On/Off |
+| Proportional Pan | Switch | On/Off |
+| Lens Initialization | Switch | On/Off |
+
+**Other**
+
+| Entity | Type | Example |
+|--------|------|---------|
+| Scene Mode | Select | Outdoor, Indoor |
 | Power Line Frequency | Select | 50 Hz, 60 Hz |
+| Capture Mode | Select | Off, 1920×1080@30fps *(varies by model)* |
+| Image Loss Detection | Switch | On/Off |
+
+Several rows say "(varies by model)", see section "Translation coverage gaps warning"
 
 Additional entities appear on specific models: P-Iris controls (motorized zoom cameras), focus mode, scene mode, lens distortion correction (panoramic cameras), IR high/low brightness, and more.
 
@@ -99,6 +175,44 @@ This is simpler than toggling multiple entities, and it matches how the camera a
 | PCI-D18Z2HS | Motorized zoom dome | IR, P-Iris, focus control |
 
 Should work with any Hikvision camera that supports the `/ISAPI/Image/channels/1` endpoint (most modern models). If your camera doesn't work, holler at me, I'll see what we can track down.
+
+## Languages
+
+The integration's entity names, dropdown options, and setup dialog are translatable. Available so far:
+
+- English (`en`) — default/fallback
+- French (`fr`)
+- Chinese, Simplified (`zh-Hans`)
+- Chinese, Traditional (`zh-Hant`)
+
+Home Assistant picks the file that matches your profile's language setting (**Settings → General → Language**, or your per-user profile language) automatically — nothing to configure in the integration itself. If your language isn't listed, it falls back to English.
+
+### Contributing a translation
+
+1. Copy `custom_components/hikvision_isapi/translations/en.json` to `<language_code>.json` in the same folder, using a [BCP 47](https://developers.home-assistant.io/docs/translations/) language tag (e.g., `de.json`, `es.json`, `pt-BR.json`).
+
+   **Important:** the filename must exactly match a tag from Home Assistant's own list of supported languages — the same list used to populate the language dropdown in a user's profile settings. A tag can be valid BCP 47 and still not work here if HA itself doesn't recognize it (e.g. use `zh-Hans`/`zh-Hant`, not `zh-CN`/`zh-HK` — Home Assistant only ships the former). If in doubt, check what your own Settings → your profile → Language dropdown actually offers.
+2. Translate the values on the right-hand side only — never change the keys on the left, or Home Assistant won't be able to match them up.
+3. Under `"entity" → "select" → <key> → "state"`, only the *values* need translating — the raw keys (`"close"`, `"auto"`, etc.) are the literal values the camera reports and must stay as-is.
+4. Open a PR. If you're not sure a translated string reads naturally, leave a note in the PR — happy to get a second opinion before merging.
+
+### "Translation coverage gaps" warning
+
+Different Hikvision camera models and firmware versions don't all report the same settings the same way — a setting that's a slider (`number`) on one model can be a dropdown (`select`) on another, and the same setting can even live at a differently-cased ISAPI path. When that happens, an entity or a select option can end up with no matching translation entry.
+
+`Zoom Limit Ratio`, `Focus Limit Mode` and `Capture Mode` : We only got a name but never the real option values from a coverage log.
+
+That's harmless: an entity with no translation still gets a readable, generated English name (e.g. "Focus Distance Mode") instead of no name at all, and an untranslated select option just shows its raw camera value. But it's still a **gap worth reporting** — a generated or raw fallback isn't a substitute for a proper name or translation, and it's easy to overlook one quietly showing up in English inside an otherwise fully-translated dashboard.
+
+If you see a log entry in `System -> Logs` like this after setting up the integration:
+
+```
+Translation coverage gaps for this camera (harmless — raw values are shown
+until these are added to strings.json / translations/en.json):
+- Exposure/PIris/Type  (translation_key: exposure_piris_type)  → no entry under entity.select.exposure_piris_type in strings.json; ...
+```
+
+it means your camera reported something under a path this integration hasn't seen before — even if the entity itself looks fine in the UI. Please open an issue (or a PR) with that log line and, if possible, the actual option values shown in Home Assistant's entity settings — that's exactly what's needed to add proper naming and translations for your camera model.
 
 ## Installation
 
