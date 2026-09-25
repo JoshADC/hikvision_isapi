@@ -406,7 +406,7 @@
   "issues": {
     "translation_gaps": {
       "title": "Missing translations for {count} setting(s) on camera model {model}",
-      "description": "Your camera reported settings this integration doesn't have translations for yet. They still work normally \u2014 they just show a generic name or their raw camera value until this is fixed.\n\n```\n{gaps}\n```\n\nPlease [open an issue]({github_url}) with this list so proper names and translations can be added for your camera model."
+      "description": "Camera model: {model} (firmware {firmware})\n\nYour camera reported settings this integration doesn't have translations for yet. They still work normally \u2014 they just show a generic name or their raw camera value until this is fixed.\n\n```\n{gaps}\n```\n\nPlease [open an issue]({github_url}) with this list so proper names and translations can be added for your camera model."
     }
   }
 }
