@@ -65,3 +65,8 @@ was ever translated at the value level, only `select.` entities were.
 - If you're not sure whether an automation is affected, check its
   current option value in Developer Tools → States before and after
   upgrading, or open an issue and we can help confirm the right value.
+
+## Closes following PR & Issues
+
+- PR #10 [feat] add support for multi-language @baylanger
+- Issue #6 Could you support Chinese language? @kou147258
