@@ -10,7 +10,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .capabilities import EntityType
+from .capabilities import FRIENDLY_NAMES, EntityType
 from .coordinator import HikvisionISAPICoordinator
 from .entity import HikvisionISAPIEntity
 from .prerequisites import put_with_prerequisites
@@ -44,7 +44,19 @@ class HikvisionISAPISelect(HikvisionISAPIEntity, SelectEntity):
         # Options are raw ISAPI values. HA translates them for display in the
         # picker using this entity's translation_key + the "state" block in
         # strings.json/translations/<lang>.json — see entity.py for the key.
-        self._attr_options = descriptor.options
+        #
+        # Legacy mode (cameras set up before v1.4.0) keeps the old English
+        # words as the values so existing automations keep working. Those
+        # words have no "state" translation, so HA shows them as-is.
+        if coordinator.legacy_select_values:
+            friendly = [FRIENDLY_NAMES.get(o, o) for o in descriptor.options]
+            self._raw_to_shown = dict(zip(descriptor.options, friendly))
+            self._shown_to_raw = dict(zip(friendly, descriptor.options))
+            self._attr_options = friendly
+        else:
+            self._raw_to_shown = {}
+            self._shown_to_raw = {}
+            self._attr_options = descriptor.options
         # For merged mode selects (e.g., BLC Mode controls both mode and enabled)
         self._linked_enabled_path = descriptor.linked_enabled_path
         self._off_value = descriptor.off_value
@@ -63,11 +75,11 @@ class HikvisionISAPISelect(HikvisionISAPIEntity, SelectEntity):
             )
             if enabled.lower() != "true":
                 raw = self._off_value
-        return raw or None
+        return self._raw_to_shown.get(raw, raw) if raw else None
 
     async def async_select_option(self, option: str) -> None:
-        """Select an option via ISAPI. HA passes back the raw option value."""
-        raw_value = option
+        """Select an option via ISAPI."""
+        raw_value = self._shown_to_raw.get(option, option)
 
         if self._linked_enabled_path:
             result = await self._set_linked_mode(raw_value)

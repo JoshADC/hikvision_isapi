@@ -233,9 +233,20 @@ Copy the `custom_components/hikvision_isapi` folder to your Home Assistant `conf
 1. Go to **Settings → Devices & Services → Add Integration**
 2. Search for **Hikvision ISAPI Image Control**
 3. Enter your camera's IP address, username, and password (admin credentials required)
-4. Entities are auto-created based on your camera's capabilities
+4. Optionally give the camera a name, e.g. `Porch`. It becomes the device name and the start of every entity ID (`select.porch_shutter_speed`). Leave it blank to use the model and IP address (`select.ds_2cd2387g2_lu_192_168_8_127_shutter_speed`).
+5. Entities are auto-created based on your camera's capabilities
 
 To change the IP or credentials later, use the three-dot menu on the integration entry → **Reconfigure**.
+
+To rename an existing camera, open its device page, click the pencil icon, and change the name. Home Assistant offers to rename all of its entity IDs to match.
+
+### Dropdown values (v1.4.0+)
+
+Since v1.4.0, dropdowns (select entities) use the camera's own values, like `close` or `colorVuWhiteLight`, so Home Assistant can show them in your language. Before v1.4.0 they used English words like `Off` or `White Light`.
+
+**Cameras set up before v1.4.0 keep the English words**, so existing automations keep working after the update. To switch a camera to the new values, go to the integration entry → **Configure** → turn off **Keep old dropdown values**. Any automation that sets or checks one of the old English words on that camera's dropdowns must then be updated. Developer Tools → States shows each dropdown's current value.
+
+Values that are numbers, like shutter speed `1/120`, are the same either way.
 
 ## Troubleshooting
 

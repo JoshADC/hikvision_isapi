@@ -7,7 +7,11 @@
         "data": {
           "host": "主機",
           "username": "用戶名稱",
-          "password": "密碼"
+          "password": "密碼",
+          "name": "攝影機名稱（選填）"
+        },
+        "data_description": {
+          "name": "用作裝置名稱以及每個實體 ID 的開頭，例如「Porch」會產生 select.porch_shutter_speed。留空則使用型號和 IP 位址。"
         }
       },
       "reconfigure": {
@@ -29,6 +33,17 @@
       "already_configured": "此攝錄機已經設定完成。",
       "reconfigure_successful": "攝錄機認證資料已更新。",
       "unique_id_mismatch": "你所輸入的設定所連接的是另一部攝錄機，而非正在重新設定的攝錄機。如要切換至其他攝錄機，請刪除此項目並重新新增。"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "攝影機選項",
+        "description": "**保留舊的下拉選項值**：下拉選單（select 實體）繼續使用 v1.4.0 之前的英文值，例如「Off」或「White Light」。在 v1.4.0 之前新增的攝影機預設開啟此選項，讓現有自動化繼續正常運作。\n\n關閉後將使用攝影機本身的值，例如「close」或「colorVuWhiteLight」，下拉選單將以您的語言顯示。任何在此攝影機下拉選單上設定或判斷舊英文值的自動化、腳本或範本都需要改為新值。",
+        "data": {
+          "legacy_select_values": "保留舊的下拉選項值（英文）"
+        }
+      }
     }
   },
   "entity": {
@@ -406,7 +421,7 @@
   "issues": {
     "translation_gaps": {
       "title": "攝錄機型號 {model} 有 {count} 項設定缺少翻譯",
-      "description": "攝錄機型號：{model}（韌體版本 {firmware}）\n\n你的攝錄機回報了一些此整合套件尚未提供翻譯的設定。它們仍可正常運作\u2014\u2014在修正之前，只會顯示通用名稱或攝錄機的原始數值。\n\n```\n{gaps}\n```\n\n請[提交一個 issue]({github_url})並附上此清單，以便為你的攝錄機型號加入正確的名稱與翻譯。"
+      "description": "攝錄機型號：{model}（韌體版本 {firmware}）\n\n你的攝錄機回報了一些此整合套件尚未提供翻譯的設定。它們仍可正常運作——在修正之前，只會顯示通用名稱或攝錄機的原始數值。\n\n```\n{gaps}\n```\n\n請[提交一個 issue]({github_url})並附上此清單，以便為你的攝錄機型號加入正確的名稱與翻譯。"
     }
   }
 }

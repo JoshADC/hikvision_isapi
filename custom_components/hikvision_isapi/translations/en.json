@@ -7,7 +7,11 @@
         "data": {
           "host": "Host",
           "username": "Username",
-          "password": "Password"
+          "password": "Password",
+          "name": "Camera name (optional)"
+        },
+        "data_description": {
+          "name": "Used as the device name and the start of every entity ID, e.g. \"Porch\" gives select.porch_shutter_speed. Leave blank to use the model and IP address."
         }
       },
       "reconfigure": {
@@ -29,6 +33,17 @@
       "already_configured": "This camera is already configured.",
       "reconfigure_successful": "Camera credentials updated.",
       "unique_id_mismatch": "The settings you entered connect to a different camera than the one being reconfigured. To switch to a different camera, delete this entry and add it again."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Camera options",
+        "description": "**Keep old dropdown values** keeps dropdowns (select entities) using the English words from before v1.4.0, like \"Off\" or \"White Light\". Cameras set up before v1.4.0 have this turned on so existing automations keep working.\n\nTurn it off to use the camera's own values, like \"close\" or \"colorVuWhiteLight\". The dropdowns are then shown in your language. Any automation, script or template that sets or checks one of the old English words on this camera's dropdowns must be updated to the new value.",
+        "data": {
+          "legacy_select_values": "Keep old dropdown values (English words)"
+        }
+      }
     }
   },
   "entity": {
@@ -391,7 +406,7 @@
         "name": "Capture Mode",
         "state": {
           "close": "Off",
-          "1920*1080@30fps": "1920×1080 @ 30fps"
+          "1920*1080@30fps": "1920\u00d71080 @ 30fps"
         }
       },
       "supplementlight_eventintelligencemodecfg_brightnessregulatmode": {

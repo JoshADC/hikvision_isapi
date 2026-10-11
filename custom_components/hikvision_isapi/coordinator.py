@@ -140,6 +140,9 @@ class HikvisionISAPICoordinator(DataUpdateCoordinator):
         self.client = client
         self.device_info = device_info
         self.entity_descriptors: List[EntityDescriptor] = []
+        # Set by async_setup_entry from the config entry
+        self.display_name = f"{device_info.model} ({client.host})"
+        self.legacy_select_values = False
         self._capabilities_fetched = False
 
     async def _async_update_data(self) -> Dict[str, str]:

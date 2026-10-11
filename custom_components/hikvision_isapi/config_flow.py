@@ -8,10 +8,16 @@ from typing import Any, Dict, Optional
 import httpx
 import voluptuous as vol
 
-from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
+from homeassistant.config_entries import (
+    ConfigEntry,
+    ConfigFlow,
+    ConfigFlowResult,
+    OptionsFlow,
+)
+from homeassistant.core import callback
 from homeassistant.const import CONF_HOST, CONF_PASSWORD, CONF_USERNAME
 
-from .const import DOMAIN
+from .const import CONF_LEGACY_SELECT_VALUES, CONF_NAME, DOMAIN
 from .isapi_client import DeviceInfo, ISAPIClient
 
 _LOGGER = logging.getLogger(__name__)
@@ -21,6 +27,7 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
         vol.Required(CONF_HOST): str,
         vol.Required(CONF_USERNAME, default="admin"): str,
         vol.Required(CONF_PASSWORD): str,
+        vol.Optional(CONF_NAME): str,
     }
 )
 
@@ -51,6 +58,14 @@ class HikvisionISAPIConfigFlow(ConfigFlow, domain=DOMAIN):
     """Handle a config flow for Hikvision ISAPI."""
 
     VERSION = 1
+    # 1.2: options carry legacy_select_values (see async_migrate_entry)
+    MINOR_VERSION = 2
+
+    @staticmethod
+    @callback
+    def async_get_options_flow(config_entry: ConfigEntry) -> OptionsFlow:
+        """Return the options flow."""
+        return HikvisionISAPIOptionsFlow()
 
     async def async_step_user(
         self, user_input: Optional[Dict[str, Any]] = None
@@ -71,13 +86,21 @@ class HikvisionISAPIConfigFlow(ConfigFlow, domain=DOMAIN):
                 await self.async_set_unique_id(device_info.unique_id)
                 self._abort_if_unique_id_configured()
 
+                data = {
+                    CONF_HOST: host,
+                    CONF_USERNAME: username,
+                    CONF_PASSWORD: password,
+                }
+                # Optional camera name: becomes the device name, and so the
+                # start of every entity ID. Blank keeps "model (host)".
+                name = (user_input.get(CONF_NAME) or "").strip()
+                if name:
+                    data[CONF_NAME] = name
+
                 return self.async_create_entry(
-                    title=f"{device_info.model} ({host})",
-                    data={
-                        CONF_HOST: host,
-                        CONF_USERNAME: username,
-                        CONF_PASSWORD: password,
-                    },
+                    title=name or f"{device_info.model} ({host})",
+                    data=data,
+                    options={CONF_LEGACY_SELECT_VALUES: False},
                 )
 
         return self.async_show_form(
@@ -132,4 +155,29 @@ class HikvisionISAPIConfigFlow(ConfigFlow, domain=DOMAIN):
                 }
             ),
             errors=errors,
+        )
+
+
+class HikvisionISAPIOptionsFlow(OptionsFlow):
+    """Per-camera options."""
+
+    async def async_step_init(
+        self, user_input: Optional[Dict[str, Any]] = None
+    ) -> ConfigFlowResult:
+        """Choose between old English dropdown values and raw camera values."""
+        if user_input is not None:
+            return self.async_create_entry(data=user_input)
+
+        return self.async_show_form(
+            step_id="init",
+            data_schema=vol.Schema(
+                {
+                    vol.Required(
+                        CONF_LEGACY_SELECT_VALUES,
+                        default=self.config_entry.options.get(
+                            CONF_LEGACY_SELECT_VALUES, False
+                        ),
+                    ): bool,
+                }
+            ),
         )

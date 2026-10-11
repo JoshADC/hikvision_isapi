@@ -1,43 +1,24 @@
-## ⚠️ Breaking Change: `select` entity values
+## Dropdown values: existing cameras are unchanged
 
-This release adds multi-language support. As part of that, **any `select`
-entity from this integration now exposes the camera's raw value as its
-state, instead of a translated English word.**
+This release adds multi-language support. To make translated dropdowns
+possible, **new cameras** use the camera's own value as the state of each
+dropdown (`select` entity), like `close` or `colorVuWhiteLight`, instead
+of an English word like `Off` or `White Light`. Home Assistant shows those
+values in your language.
 
-Before, a select's value (not just its displayed label) was already
-translated — e.g. `Off`, `On`, `White Light`. Automations, scripts, and
-templates that used `option: "Off"` or compared `states('select.xxx')`
-to one of these words were reading and writing that translated value
-directly.
+**Cameras you already have keep the English words.** On update, each
+existing camera is set to **Keep old dropdown values**, so automations,
+scripts and templates that use `option: "Off"` and similar keep working.
+Nothing needs to change.
 
-Now, the select's actual value is the camera's own raw setting — e.g.
-`close`, `open`, `colorVuWhiteLight`. Home Assistant translates that raw
-value into a friendly, localized label for display, but the value your
-automations see and set is the raw one.
+When you're ready for translated dropdowns on an existing camera: the
+integration entry → **Configure** → turn off **Keep old dropdown values**.
+After that, any automation that sets or checks an old English word on that
+camera's dropdowns must use the new value instead. Developer Tools →
+States shows each dropdown's current value.
 
-**This means:** if you have an automation, script, or template that sends
-or checks an option like `"Off"`, `"On"`, `"White Light"`, `"Auto"`, etc.
-on one of this integration's dropdown (`select.`) entities, it will break
-after upgrading and needs to be updated to use the new raw value instead.
-
-This is the correct, necessary trade-off to make translation possible —
-Home Assistant expects an entity's value to be stable and
-language-independent, with translation handled as a display concern on
-top of it — but it does mean a one-time update is needed for existing
-automations.
-
-**Not affected:** `switch.` entities (BLC, HLC, Image Flip, etc.) and
-`number.` entities (Brightness, Gain, WDR Level, etc.) — neither of these
-was ever translated at the value level, only `select.` entities were.
-
-### How to check if you're affected
-
-1. Settings → Automations & Scenes — review any automation with a
-   trigger/condition/action on a `select.` entity from this integration.
-2. Developer Tools → States — filter by `select.` and this integration's
-   device to see each entity's current raw value.
-3. Update any hardcoded option strings to match the new raw values shown
-   there.
+Values that are numbers, like shutter speed `1/120`, are the same either
+way. `switch.` and `number.` entities are not affected.
 
 ## What's new / changed
 
@@ -54,14 +35,17 @@ was ever translated at the value level, only `select.` entities were.
   a setting this integration doesn't have a name or translation for yet,
   it now shows up as a Repairs notice (Settings → System → Repairs) in
   addition to the log — no need to dig through logs to notice it.
-- Bug fixes found and fixed during this work: a blocking-I/O warning.
-  coverage check.
+- **New: optional camera name when adding a camera.** It becomes the
+  device name and the start of every entity ID, e.g. `Porch` gives
+  `select.porch_shutter_speed`. Leave it blank for the old model + IP
+  naming. Existing cameras are not renamed.
+- Bug fix: a blocking-I/O warning during the translation coverage check.
 
 ## Upgrade notes
 
-- Existing entity IDs, unique IDs, and entity history are unaffected —
-  only the underlying select values changed, not how entities are
-  identified.
+- Existing entity IDs, unique IDs, entity names, and entity history are
+  unaffected.
+- Rolling back to v1.3.0 still works.
 - If you're not sure whether an automation is affected, check its
   current option value in Developer Tools → States before and after
   upgrading, or open an issue and we can help confirm the right value.
@@ -70,3 +54,4 @@ was ever translated at the value level, only `select.` entities were.
 
 - PR #10 [feat] add support for multi-language @baylanger
 - Issue #6 Could you support Chinese language? @kou147258
+- Issue #11 Allow customizable entity_id naming @baylanger

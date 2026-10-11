@@ -7,7 +7,11 @@
         "data": {
           "host": "Hôte",
           "username": "Nom d'utilisateur",
-          "password": "Mot de passe"
+          "password": "Mot de passe",
+          "name": "Nom de la caméra (facultatif)"
+        },
+        "data_description": {
+          "name": "Utilisé comme nom de l'appareil et au début de chaque identifiant d'entité, par ex. « Porche » donne select.porche_shutter_speed. Laissez vide pour utiliser le modèle et l'adresse IP."
         }
       },
       "reconfigure": {
@@ -29,6 +33,17 @@
       "already_configured": "Cette caméra est déjà configurée.",
       "reconfigure_successful": "Identifiants de la caméra mis à jour.",
       "unique_id_mismatch": "Les paramètres que vous avez entrés se connectent à une caméra différente de celle en cours de reconfiguration. Pour basculer vers une autre caméra, supprimez cette entrée et ajoutez-la à nouveau."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Options de la caméra",
+        "description": "**Conserver les anciennes valeurs des listes** garde les listes déroulantes (entités select) avec les mots anglais d'avant la v1.4.0, comme « Off » ou « White Light ». Les caméras configurées avant la v1.4.0 ont cette option activée pour que les automatisations existantes continuent de fonctionner.\n\nDésactivez-la pour utiliser les valeurs propres à la caméra, comme « close » ou « colorVuWhiteLight ». Les listes sont alors affichées dans votre langue. Toute automatisation, script ou modèle qui définit ou vérifie un des anciens mots anglais sur les listes de cette caméra doit être mis à jour avec la nouvelle valeur.",
+        "data": {
+          "legacy_select_values": "Conserver les anciennes valeurs des listes (mots anglais)"
+        }
+      }
     }
   },
   "entity": {
@@ -406,7 +421,7 @@
   "issues": {
     "translation_gaps": {
       "title": "Traductions manquantes pour {count} paramètre(s) sur le modèle de caméra {model}",
-      "description": "Modèle de caméra : {model} (firmware {firmware})\n\nVotre caméra a signalé des paramètres pour lesquels cette intégration n'a pas encore de traductions. Ils fonctionnent normalement \u2014 ils affichent simplement un nom générique ou leur valeur brute de la caméra en attendant que ce soit corrigé.\n\n```\n{gaps}\n```\n\nVeuillez [ouvrir un ticket]({github_url}) avec cette liste afin que des noms et traductions appropriés puissent être ajoutés pour votre modèle de caméra."
+      "description": "Modèle de caméra : {model} (firmware {firmware})\n\nVotre caméra a signalé des paramètres pour lesquels cette intégration n'a pas encore de traductions. Ils fonctionnent normalement — ils affichent simplement un nom générique ou leur valeur brute de la caméra en attendant que ce soit corrigé.\n\n```\n{gaps}\n```\n\nVeuillez [ouvrir un ticket]({github_url}) avec cette liste afin que des noms et traductions appropriés puissent être ajoutés pour votre modèle de caméra."
     }
   }
 }

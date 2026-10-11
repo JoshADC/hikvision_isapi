@@ -62,7 +62,7 @@ class HikvisionISAPIEntity(CoordinatorEntity[HikvisionISAPICoordinator]):
         device = self.coordinator.device_info
         return HADeviceInfo(
             identifiers={(DOMAIN, device.unique_id)},
-            name=f"{device.model} ({self.coordinator.client.host})",
+            name=self.coordinator.display_name,
             manufacturer="Hikvision",
             model=device.model,
             sw_version=f"{device.firmware_version} {device.firmware_build}",
