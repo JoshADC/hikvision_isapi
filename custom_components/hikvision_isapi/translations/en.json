@@ -30,5 +30,383 @@
       "reconfigure_successful": "Camera credentials updated.",
       "unique_id_mismatch": "The settings you entered connect to a different camera than the one being reconfigured. To switch to a different camera, delete this entry and add it again."
     }
+  },
+  "entity": {
+    "switch": {
+      "blc_enabled": {
+        "name": "BLC"
+      },
+      "hlc_enabled": {
+        "name": "HLC"
+      },
+      "imageflip_enabled": {
+        "name": "Image Flip"
+      },
+      "lensdistortioncorrection_enabled": {
+        "name": "Lens Distortion Correction"
+      },
+      "exposure_overexposesuppress_enabled": {
+        "name": "Smart Supplement Light"
+      },
+      "eis_enabled": {
+        "name": "Image Stabilization"
+      },
+      "dss_enabled": {
+        "name": "Digital Slow Shutter"
+      },
+      "imagefreeze_enabled": {
+        "name": "Image Freeze"
+      },
+      "lensinitialization_enabled": {
+        "name": "Lens Initialization"
+      },
+      "proportionalpan_enabled": {
+        "name": "Proportional Pan"
+      },
+      "enableimagelossdetection": {
+        "name": "Image Loss Detection"
+      }
+    },
+    "number": {
+      "wdr_wdrlevel": {
+        "name": "WDR Level"
+      },
+      "hlc_hlclevel": {
+        "name": "HLC Level"
+      },
+      "ircutfilter_nighttodayfilterlevel": {
+        "name": "Night-to-Day Sensitivity"
+      },
+      "ircutfilter_nighttodayfiltertime": {
+        "name": "Night-to-Day Delay"
+      },
+      "exposure_autoirislevel": {
+        "name": "Auto Iris Level"
+      },
+      "exposure_piris_irislevel": {
+        "name": "P-Iris Level"
+      },
+      "shutter_shutterlevel": {
+        "name": "Shutter Speed"
+      },
+      "gain_gainlevel": {
+        "name": "Gain"
+      },
+      "color_brightnesslevel": {
+        "name": "Brightness"
+      },
+      "color_contrastlevel": {
+        "name": "Contrast"
+      },
+      "color_saturationlevel": {
+        "name": "Saturation"
+      },
+      "sharpness_sharpnesslevel": {
+        "name": "Sharpness"
+      },
+      "noisereduce_generalmode_generallevel": {
+        "name": "Noise Reduction Level"
+      },
+      "noisereduce_advancedmode_framenoisereducelevel": {
+        "name": "Spatial NR Level"
+      },
+      "noisereduce_advancedmode_interframenoisereducelevel": {
+        "name": "Temporal NR Level"
+      },
+      "dehaze_dehazelevel": {
+        "name": "Defog Level"
+      },
+      "whitebalance_whitebalancered": {
+        "name": "White Balance Red"
+      },
+      "whitebalance_whitebalanceblue": {
+        "name": "White Balance Blue"
+      },
+      "supplementlight_whitelightbrightness": {
+        "name": "Light Brightness"
+      },
+      "supplementlight_highirlightbrightness": {
+        "name": "IR High Brightness"
+      },
+      "supplementlight_lowirlightbrightness": {
+        "name": "IR Low Brightness"
+      },
+      "lensdistortioncorrection_accuratelevel": {
+        "name": "Correction Level"
+      },
+      "exposure_overexposesuppress_distancelevel": {
+        "name": "Smart Supplement Light Distance"
+      },
+      "iris_maxirislevellimit": {
+        "name": "Max Iris Level"
+      },
+      "iris_minirislevellimit": {
+        "name": "Min Iris Level"
+      },
+      "gain_gainlimit": {
+        "name": "Gain Limit"
+      },
+      "supplementlight_whitelightbrightnesslimit": {
+        "name": "White Light Brightness Limit"
+      },
+      "supplementlight_irlightbrightnesslimit": {
+        "name": "IR Light Brightness Limit"
+      },
+      "supplementlight_irlightbrightness": {
+        "name": "IR Light Brightness"
+      },
+      "smartnoisereduce_level": {
+        "name": "Smart Noise Reduction Level"
+      },
+      "irlight_brightnesslimit": {
+        "name": "IR Light Brightness Limit"
+      },
+      "exposure_overexposesuppress_hightlightdistancelevel": {
+        "name": "Smart Supplement Light High-Light Distance"
+      },
+      "exposure_overexposesuppress_lowlightdistancelevel": {
+        "name": "Smart Supplement Light Low-Light Distance"
+      },
+      "supplementlight_eventintelligencemodecfg_whitelightbrightness": {
+        "name": "Event Intelligence White Light Brightness"
+      },
+      "supplementlight_eventintelligencemodecfg_irlightbrightness": {
+        "name": "Event Intelligence IR Light Brightness"
+      }
+    },
+    "select": {
+      "wdr_mode": {
+        "name": "WDR",
+        "state": {
+          "close": "Off",
+          "open": "On",
+          "auto": "Auto"
+        }
+      },
+      "blc_blcmode": {
+        "name": "BLC Mode",
+        "state": {
+          "CLOSE": "Off",
+          "UP": "Up",
+          "DOWN": "Down",
+          "LEFT": "Left",
+          "RIGHT": "Right",
+          "CENTER": "Center",
+          "Region": "Region",
+          "AUTO": "Auto"
+        }
+      },
+      "ircutfilter_ircutfiltertype": {
+        "name": "Day/Night Mode",
+        "state": {
+          "day": "Day",
+          "night": "Night",
+          "auto": "Auto",
+          "schedule": "Schedule",
+          "eventTrigger": "Event Trigger"
+        }
+      },
+      "exposure_exposuretype": {
+        "name": "Iris Mode",
+        "state": {
+          "auto": "Auto",
+          "manual": "Manual",
+          "pIris-General": "P-Iris",
+          "IrisFirst": "Iris Priority",
+          "ShutterFirst": "Shutter Priority"
+        }
+      },
+      "exposure_piris_piristype": {
+        "name": "P-Iris Mode",
+        "state": {
+          "auto": "Auto",
+          "manual": "Manual"
+        }
+      },
+      "color_grayscale_grayscalemode": {
+        "name": "Color Space",
+        "state": {
+          "auto": "Auto",
+          "color": "Color",
+          "black-white": "Black & White",
+          "outdoor": "Outdoor",
+          "indoor": "Indoor"
+        }
+      },
+      "noisereduce_mode": {
+        "name": "Noise Reduction",
+        "state": {
+          "close": "Off",
+          "general": "Normal",
+          "advanced": "Advanced"
+        }
+      },
+      "dehaze_dehazemode": {
+        "name": "Defog",
+        "state": {
+          "close": "Off",
+          "auto": "Auto",
+          "manual": "Manual",
+          "open": "On"
+        }
+      },
+      "whitebalance_whitebalancestyle": {
+        "name": "White Balance",
+        "state": {
+          "auto1": "Auto 1",
+          "auto2": "Auto 2",
+          "manual": "Manual",
+          "locked": "Locked",
+          "daylightLamp": "Fluorescent",
+          "incandescentlight": "Incandescent",
+          "warmlight": "Warm Light",
+          "naturallight": "Natural Light",
+          "outdoor": "Outdoor",
+          "indoor": "Indoor",
+          "sodiumlight": "Sodium Lamp",
+          "autotrace": "Auto Trace",
+          "auto": "Auto"
+        }
+      },
+      "imageflip_imageflipstyle": {
+        "name": "Flip Direction",
+        "state": {
+          "CENTER": "Center",
+          "UPDOWN": "Up-Down",
+          "LEFTRIGHT": "Left-Right"
+        }
+      },
+      "powerlinefrequency_powerlinefrequencymode": {
+        "name": "Power Line Frequency",
+        "state": {
+          "50hz": "50 Hz",
+          "60hz": "60 Hz"
+        }
+      },
+      "supplementlight_supplementlightmode": {
+        "name": "Supplement Light",
+        "state": {
+          "close": "Off",
+          "colorVuWhiteLight": "White Light",
+          "irLight": "IR",
+          "eventIntelligence": "Event Intelligence"
+        }
+      },
+      "supplementlight_mixedlightbrightnessregulatmode": {
+        "name": "Light Brightness Mode",
+        "state": {
+          "auto": "Auto",
+          "manual": "Manual"
+        }
+      },
+      "scene_mode": {
+        "name": "Scene Mode",
+        "state": {
+          "outdoor": "Outdoor",
+          "indoor": "Indoor"
+        }
+      },
+      "focusconfiguration_focusstyle": {
+        "name": "Focus Mode",
+        "state": {
+          "AUTO": "Auto",
+          "MANUAL": "Manual",
+          "SEMIAUTOMATIC": "Semi-automatic"
+        }
+      },
+      "shutter_shutterlevel": {
+        "name": "Shutter Speed"
+      },
+      "ircutfilter_nighttodayfilterlevel": {
+        "name": "Night-to-Day Sensitivity"
+      },
+      "exposure_overexposesuppress_type": {
+        "name": "Smart Supplement Light Mode",
+        "state": {
+          "AUTO": "Auto",
+          "MANUAL": "Manual"
+        }
+      },
+      "ircutfilter_schedule_scheduletype": {
+        "name": "Day/Night Schedule Type",
+        "state": {
+          "day": "Day",
+          "night": "Night"
+        }
+      },
+      "iris_irislevel": {
+        "name": "Iris Level"
+      },
+      "shutter_maxshutterlevellimit": {
+        "name": "Max Shutter Speed"
+      },
+      "shutter_minshutterlevellimit": {
+        "name": "Min Shutter Speed"
+      },
+      "focusconfiguration_focusdistancemode": {
+        "name": "Focus Distance Mode",
+        "state": {
+          "compatible": "Compatible"
+        }
+      },
+      "focusconfiguration_focuslimited": {
+        "name": "Focus Limit Mode"
+      },
+      "dss_dsslevel": {
+        "name": "Digital Slow Shutter Level",
+        "state": {
+          "*1.25": "\u00d71.25",
+          "*1.5": "\u00d71.5",
+          "*2": "\u00d72",
+          "*3": "\u00d73",
+          "*4": "\u00d74",
+          "*6": "\u00d76",
+          "*8": "\u00d78",
+          "auto": "Auto"
+        }
+      },
+      "supplementlight_mode": {
+        "name": "Supplement Light Mode",
+        "state": {
+          "auto": "Auto"
+        }
+      },
+      "zoomlimit_zoomlimitratio": {
+        "name": "Zoom Limit Ratio"
+      },
+      "irlight_mode": {
+        "name": "IR Light Mode",
+        "state": {
+          "auto": "Auto"
+        }
+      },
+      "blc_enabled": {
+        "name": "BLC",
+        "state": {
+          "ture": "On",
+          "false": "Off"
+        }
+      },
+      "capturemode_mode": {
+        "name": "Capture Mode",
+        "state": {
+          "close": "Off",
+          "1920*1080@30fps": "1920×1080 @ 30fps"
+        }
+      },
+      "supplementlight_eventintelligencemodecfg_brightnessregulatmode": {
+        "name": "Event Intelligence Brightness Mode",
+        "state": {
+          "auto": "Auto",
+          "manual": "Manual"
+        }
+      }
+    }
+  },
+  "issues": {
+    "translation_gaps": {
+      "title": "Missing translations for {count} setting(s) on camera model {model}",
+      "description": "Camera model: {model} (firmware {firmware})\n\nYour camera reported settings this integration doesn't have translations for yet. They still work normally \u2014 they just show a generic name or their raw camera value until this is fixed.\n\n```\n{gaps}\n```\n\nPlease [open an issue]({github_url}) with this list so proper names and translations can be added for your camera model."
+    }
   }
 }

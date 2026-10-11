@@ -1,0 +1,412 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "連接至海康威視攝錄機",
+        "description": "請輸入攝錄機的 IP 地址及管理員認證資料。將會使用摘要式認證 (Digest Authentication)。",
+        "data": {
+          "host": "主機",
+          "username": "用戶名稱",
+          "password": "密碼"
+        }
+      },
+      "reconfigure": {
+        "title": "重新設定海康威視攝錄機",
+        "description": "更新攝錄機的 IP 地址或認證資料。新設定必須連接至與原本項目相同的實體攝錄機。",
+        "data": {
+          "host": "主機",
+          "username": "用戶名稱",
+          "password": "密碼"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "未能連接至攝錄機。請檢查 IP 地址並確保攝錄機連線正常。",
+      "invalid_auth": "認證資料無效。請檢查用戶名稱及密碼。",
+      "unknown": "發生未預期的錯誤。"
+    },
+    "abort": {
+      "already_configured": "此攝錄機已經設定完成。",
+      "reconfigure_successful": "攝錄機認證資料已更新。",
+      "unique_id_mismatch": "你所輸入的設定所連接的是另一部攝錄機，而非正在重新設定的攝錄機。如要切換至其他攝錄機，請刪除此項目並重新新增。"
+    }
+  },
+  "entity": {
+    "switch": {
+      "blc_enabled": {
+        "name": "背光補償 (BLC)"
+      },
+      "hlc_enabled": {
+        "name": "強光抑制 (HLC)"
+      },
+      "imageflip_enabled": {
+        "name": "影像翻轉"
+      },
+      "lensdistortioncorrection_enabled": {
+        "name": "鏡頭變形校正"
+      },
+      "exposure_overexposesuppress_enabled": {
+        "name": "智能補光燈"
+      },
+      "eis_enabled": {
+        "name": "電子防震 (EIS)"
+      },
+      "dss_enabled": {
+        "name": "數碼慢快門 (DSS)"
+      },
+      "imagefreeze_enabled": {
+        "name": "影像凍結"
+      },
+      "lensinitialization_enabled": {
+        "name": "鏡頭初始化"
+      },
+      "proportionalpan_enabled": {
+        "name": "比例雲台"
+      },
+      "enableimagelossdetection": {
+        "name": "視訊丟失偵測"
+      }
+    },
+    "number": {
+      "wdr_wdrlevel": {
+        "name": "WDR 等級"
+      },
+      "hlc_hlclevel": {
+        "name": "HLC 等級"
+      },
+      "ircutfilter_nighttodayfilterlevel": {
+        "name": "夜間轉白天靈敏度"
+      },
+      "ircutfilter_nighttodayfiltertime": {
+        "name": "夜間轉白天延遲"
+      },
+      "exposure_autoirislevel": {
+        "name": "自動光圈等級"
+      },
+      "exposure_piris_irislevel": {
+        "name": "P-Iris 等級"
+      },
+      "shutter_shutterlevel": {
+        "name": "快門速度"
+      },
+      "gain_gainlevel": {
+        "name": "增益"
+      },
+      "color_brightnesslevel": {
+        "name": "亮度"
+      },
+      "color_contrastlevel": {
+        "name": "對比度"
+      },
+      "color_saturationlevel": {
+        "name": "飽和度"
+      },
+      "sharpness_sharpnesslevel": {
+        "name": "清晰度"
+      },
+      "noisereduce_generalmode_generallevel": {
+        "name": "降噪等級"
+      },
+      "noisereduce_advancedmode_framenoisereducelevel": {
+        "name": "空間降噪等級"
+      },
+      "noisereduce_advancedmode_interframenoisereducelevel": {
+        "name": "時間降噪等級"
+      },
+      "dehaze_dehazelevel": {
+        "name": "除霧等級"
+      },
+      "whitebalance_whitebalancered": {
+        "name": "白平衡紅色"
+      },
+      "whitebalance_whitebalanceblue": {
+        "name": "白平衡藍色"
+      },
+      "supplementlight_whitelightbrightness": {
+        "name": "燈光亮度"
+      },
+      "supplementlight_highirlightbrightness": {
+        "name": "紅外線高亮度"
+      },
+      "supplementlight_lowirlightbrightness": {
+        "name": "紅外線低亮度"
+      },
+      "lensdistortioncorrection_accuratelevel": {
+        "name": "校正等級"
+      },
+      "exposure_overexposesuppress_distancelevel": {
+        "name": "智能補光距離"
+      },
+      "iris_maxirislevellimit": {
+        "name": "最大光圈等級"
+      },
+      "iris_minirislevellimit": {
+        "name": "最小光圈等級"
+      },
+      "gain_gainlimit": {
+        "name": "增益限制"
+      },
+      "supplementlight_whitelightbrightnesslimit": {
+        "name": "白光亮度限制"
+      },
+      "supplementlight_irlightbrightnesslimit": {
+        "name": "紅外線亮度限制"
+      },
+      "supplementlight_irlightbrightness": {
+        "name": "紅外線亮度"
+      },
+      "smartnoisereduce_level": {
+        "name": "智能降噪等級"
+      },
+      "irlight_brightnesslimit": {
+        "name": "紅外線亮度限制"
+      },
+      "exposure_overexposesuppress_hightlightdistancelevel": {
+        "name": "智能補光距離（高亮區域）"
+      },
+      "exposure_overexposesuppress_lowlightdistancelevel": {
+        "name": "智能補光距離（低亮區域）"
+      },
+      "supplementlight_eventintelligencemodecfg_whitelightbrightness": {
+        "name": "白光亮度（事件智能）"
+      },
+      "supplementlight_eventintelligencemodecfg_irlightbrightness": {
+        "name": "紅外線亮度（事件智能）"
+      }
+    },
+    "select": {
+      "wdr_mode": {
+        "name": "WDR",
+        "state": {
+          "close": "關閉",
+          "open": "開啟",
+          "auto": "自動"
+        }
+      },
+      "blc_blcmode": {
+        "name": "BLC 模式",
+        "state": {
+          "CLOSE": "關閉",
+          "UP": "上",
+          "DOWN": "下",
+          "LEFT": "左",
+          "RIGHT": "右",
+          "CENTER": "中心",
+          "Region": "區域",
+          "AUTO": "自動"
+        }
+      },
+      "ircutfilter_ircutfiltertype": {
+        "name": "日夜模式",
+        "state": {
+          "day": "白天",
+          "night": "夜晚",
+          "auto": "自動",
+          "schedule": "時間表",
+          "eventTrigger": "事件觸發"
+        }
+      },
+      "exposure_exposuretype": {
+        "name": "光圈模式",
+        "state": {
+          "auto": "自動",
+          "manual": "手動",
+          "pIris-General": "P-Iris",
+          "IrisFirst": "光圈優先",
+          "ShutterFirst": "快門優先"
+        }
+      },
+      "exposure_piris_piristype": {
+        "name": "P-Iris 模式",
+        "state": {
+          "auto": "自動",
+          "manual": "手動"
+        }
+      },
+      "color_grayscale_grayscalemode": {
+        "name": "色彩空間",
+        "state": {
+          "auto": "自動",
+          "color": "彩色",
+          "black-white": "黑白",
+          "outdoor": "戶外",
+          "indoor": "室內"
+        }
+      },
+      "noisereduce_mode": {
+        "name": "降噪",
+        "state": {
+          "close": "關閉",
+          "general": "一般",
+          "advanced": "進階"
+        }
+      },
+      "dehaze_dehazemode": {
+        "name": "除霧",
+        "state": {
+          "close": "關閉",
+          "auto": "自動",
+          "manual": "手動",
+          "open": "開啟"
+        }
+      },
+      "whitebalance_whitebalancestyle": {
+        "name": "白平衡",
+        "state": {
+          "auto1": "自動 1",
+          "auto2": "自動 2",
+          "manual": "手動",
+          "locked": "已鎖定",
+          "daylightLamp": "光管",
+          "incandescentlight": "白熾燈",
+          "warmlight": "暖光",
+          "naturallight": "自然光",
+          "outdoor": "戶外",
+          "indoor": "室內",
+          "sodiumlight": "鈉燈",
+          "autotrace": "自動追蹤",
+          "auto": "自動"
+        }
+      },
+      "imageflip_imageflipstyle": {
+        "name": "翻轉方向",
+        "state": {
+          "CENTER": "中心",
+          "UPDOWN": "上下",
+          "LEFTRIGHT": "左右"
+        }
+      },
+      "powerlinefrequency_powerlinefrequencymode": {
+        "name": "電源頻率",
+        "state": {
+          "50hz": "50 Hz",
+          "60hz": "60 Hz"
+        }
+      },
+      "supplementlight_supplementlightmode": {
+        "name": "輔助光",
+        "state": {
+          "close": "關閉",
+          "colorVuWhiteLight": "白光",
+          "irLight": "紅外線 (IR)",
+          "eventIntelligence": "事件智能"
+        }
+      },
+      "supplementlight_mixedlightbrightnessregulatmode": {
+        "name": "燈光亮度模式",
+        "state": {
+          "auto": "自動",
+          "manual": "手動"
+        }
+      },
+      "scene_mode": {
+        "name": "場景模式",
+        "state": {
+          "outdoor": "戶外",
+          "indoor": "室內"
+        }
+      },
+      "focusconfiguration_focusstyle": {
+        "name": "對焦模式",
+        "state": {
+          "AUTO": "自動",
+          "MANUAL": "手動",
+          "SEMIAUTOMATIC": "半自動"
+        }
+      },
+      "exposure_overexposesuppress_type": {
+        "name": "智能補光燈模式",
+        "state": {
+          "AUTO": "自動",
+          "MANUAL": "手動"
+        }
+      },
+      "shutter_shutterlevel": {
+        "name": "快門速度"
+      },
+      "ircutfilter_nighttodayfilterlevel": {
+        "name": "夜間轉白天靈敏度"
+      },
+      "ircutfilter_schedule_scheduletype": {
+        "name": "日夜時間表類型",
+        "state": {
+          "day": "白天",
+          "night": "夜晚"
+        }
+      },
+      "iris_irislevel": {
+        "name": "光圈等級"
+      },
+      "shutter_maxshutterlevellimit": {
+        "name": "最大快門速度"
+      },
+      "shutter_minshutterlevellimit": {
+        "name": "最小快門速度"
+      },
+      "focusconfiguration_focusdistancemode": {
+        "name": "對焦距離模式",
+        "state": {
+          "compatible": "相容"
+        }
+      },
+      "focusconfiguration_focuslimited": {
+        "name": "對焦限制模式"
+      },
+      "dss_dsslevel": {
+        "name": "數碼慢快門等級",
+        "state": {
+          "*1.25": "×1.25",
+          "*1.5": "×1.5",
+          "*2": "×2",
+          "*3": "×3",
+          "*4": "×4",
+          "*6": "×6",
+          "*8": "×8",
+          "auto": "自動"
+        }
+      },
+      "supplementlight_mode": {
+        "name": "輔助光模式",
+        "state": {
+          "auto": "自動"
+        }
+      },
+      "zoomlimit_zoomlimitratio": {
+        "name": "變焦限制比例"
+      },
+      "irlight_mode": {
+        "name": "紅外線模式",
+        "state": {
+          "auto": "自動"
+        }
+      },
+      "blc_enabled": {
+        "name": "背光補償 (BLC)",
+        "state": {
+          "ture": "開啟",
+          "false": "關閉"
+        }
+      },
+      "capturemode_mode": {
+        "name": "擷取模式",
+        "state": {
+          "close": "關閉",
+          "1920*1080@30fps": "1920×1080 @ 30fps"
+        }
+      },
+      "supplementlight_eventintelligencemodecfg_brightnessregulatmode": {
+        "name": "亮度模式（事件智能）",
+        "state": {
+          "auto": "自動",
+          "manual": "手動"
+        }
+      }
+    }
+  },
+  "issues": {
+    "translation_gaps": {
+      "title": "攝錄機型號 {model} 有 {count} 項設定缺少翻譯",
+      "description": "攝錄機型號：{model}（韌體版本 {firmware}）\n\n你的攝錄機回報了一些此整合套件尚未提供翻譯的設定。它們仍可正常運作\u2014\u2014在修正之前，只會顯示通用名稱或攝錄機的原始數值。\n\n```\n{gaps}\n```\n\n請[提交一個 issue]({github_url})並附上此清單，以便為你的攝錄機型號加入正確的名稱與翻譯。"
+    }
+  }
+}
