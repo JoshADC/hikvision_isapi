@@ -224,6 +224,14 @@ Built against a DS-2CD2385G1-I with an Aeotec multisensor mounted indoors, point
 - **Write method:** Read-modify-write with raw XML string manipulation (ElementTree re-serialization mangles Hikvision's repeated xmlns declarations, causing the camera to reject PUTs)
 - **Conflict resolution:** Two-step sequential PUTs — camera validates against current state, not the PUT body
 
+## Further Reading
+
+- **[hikvision-best-practices](https://github.com/uchkunr/hikvision-best-practices)** — a developer reference for Hikvision's ISAPI protocol (authentication, events, video, PTZ). Useful if you want to understand what this integration is talking to under the hood. Suggested by [@baylanger](https://github.com/baylanger).
+
 ## Disclaimer
 
 This project is not affiliated with, endorsed by, or connected to Hangzhou Hikvision Digital Technology Co., Ltd. "Hikvision" and "ISAPI" are trademarks of their respective owners. Use at your own risk.
+
+## License
+
+MIT — see [LICENSE](LICENSE).
